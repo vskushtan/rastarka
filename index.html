@@ -1,521 +1,283 @@
 <!DOCTYPE html>
-<html lang="uk">
+<html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Растарка</title>
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
-<style>
-  /* ===== ЗМІННІ ===== */
-  :root {
-    --bg: #f0f2f5;
-    --card: #ffffff;
-    --primary: #2563eb;
-    --primary-dark: #1d4ed8;
-    --success: #16a34a;
-    --danger: #dc2626;
-    --text: #111827;
-    --text-muted: #6b7280;
-    --border: #e5e7eb;
-    --radius: 14px;
-    --shadow: 0 2px 12px rgba(0,0,0,0.08);
-  }
-
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    padding: 16px;
-    padding-bottom: 32px;
-  }
-
-  /* ===== ЗАГОЛОВОК ===== */
-  .header {
-    text-align: center;
-    margin-bottom: 20px;
-    padding-top: 8px;
-  }
-  .header h1 {
-    font-size: 22px;
-    font-weight: 700;
-    color: var(--primary);
-    letter-spacing: -0.5px;
-  }
-  .header p {
-    font-size: 13px;
-    color: var(--text-muted);
-    margin-top: 4px;
-  }
-
-  /* ===== КАРТКА ===== */
-  .card {
-    background: var(--card);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
-    padding: 16px;
-    margin-bottom: 12px;
-  }
-
-  /* ===== ЛЕЙБЛ ===== */
-  .field-label {
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.6px;
-    margin-bottom: 8px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-  .field-label .step {
-    width: 20px;
-    height: 20px;
-    background: var(--primary);
-    color: #fff;
-    border-radius: 50%;
-    font-size: 11px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 700;
-    flex-shrink: 0;
-  }
-  .field-label .step.done {
-    background: var(--success);
-  }
-
-  /* ===== SELECT ===== */
-  select {
-    width: 100%;
-    padding: 13px 16px;
-    border: 2px solid var(--border);
-    border-radius: 10px;
-    font-size: 15px;
-    color: var(--text);
-    background: #fff;
-    appearance: none;
-    -webkit-appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 14px center;
-    cursor: pointer;
-    transition: border-color 0.2s, box-shadow 0.2s;
-    outline: none;
-  }
-  select:focus {
-    border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(37,99,235,0.12);
-  }
-  select:disabled {
-    background-color: #f9fafb;
-    color: #9ca3af;
-    cursor: not-allowed;
-    border-color: var(--border);
-  }
-  select option { color: var(--text); }
-
-  /* ===== КІЛЬКІСТЬ ===== */
-  .qty-row {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-  .qty-btn {
-    width: 44px;
-    height: 44px;
-    border-radius: 10px;
-    border: 2px solid var(--border);
-    background: #fff;
-    font-size: 22px;
-    color: var(--primary);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    transition: background 0.15s, border-color 0.15s;
-    font-weight: 300;
-  }
-  .qty-btn:active { background: #eff6ff; border-color: var(--primary); }
-  .qty-btn:disabled { color: #d1d5db; cursor: not-allowed; }
-
-  input[type="number"] {
-    flex: 1;
-    padding: 13px 16px;
-    border: 2px solid var(--border);
-    border-radius: 10px;
-    font-size: 18px;
-    font-weight: 600;
-    text-align: center;
-    color: var(--text);
-    outline: none;
-    transition: border-color 0.2s, box-shadow 0.2s;
-    -moz-appearance: textfield;
-  }
-  input[type="number"]::-webkit-inner-spin-button,
-  input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; }
-  input[type="number"]:focus {
-    border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(37,99,235,0.12);
-  }
-  input[type="number"]:disabled {
-    background: #f9fafb;
-    color: #9ca3af;
-  }
-  .qty-unit {
-    font-size: 14px;
-    color: var(--text-muted);
-    font-weight: 500;
-    flex-shrink: 0;
-  }
-
-  /* ===== ПІДСУМОК ===== */
-  .summary {
-    display: none;
-    background: #eff6ff;
-    border: 1px solid #bfdbfe;
-    border-radius: 10px;
-    padding: 12px 14px;
-    margin-top: 4px;
-  }
-  .summary.visible { display: block; }
-  .summary-row {
-    display: flex;
-    justify-content: space-between;
-    font-size: 13px;
-    color: var(--text-muted);
-    padding: 2px 0;
-  }
-  .summary-row span:last-child {
-    font-weight: 600;
-    color: var(--text);
-  }
-
-  /* ===== КНОПКА ЗБЕРЕГТИ ===== */
-  .save-btn {
-    width: 100%;
-    padding: 16px;
-    border-radius: var(--radius);
-    border: none;
-    background: var(--primary);
-    color: #fff;
-    font-size: 16px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: background 0.2s, transform 0.1s, opacity 0.2s;
-    letter-spacing: 0.2px;
-    margin-top: 4px;
-  }
-  .save-btn:active { transform: scale(0.98); }
-  .save-btn:disabled {
-    background: #93c5fd;
-    cursor: not-allowed;
-    transform: none;
-  }
-  .save-btn.loading {
-    opacity: 0.8;
-    cursor: not-allowed;
-  }
-
-  /* ===== ЗАВАНТАЖЕННЯ ===== */
-  .loader {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 48px 0;
-    gap: 14px;
-    color: var(--text-muted);
-    font-size: 14px;
-  }
-  .spinner {
-    width: 36px;
-    height: 36px;
-    border: 3px solid var(--border);
-    border-top-color: var(--primary);
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-  }
-  @keyframes spin { to { transform: rotate(360deg); } }
-
-  /* ===== ПОМИЛКА ===== */
-  .error-block {
-    background: #fef2f2;
-    border: 1px solid #fecaca;
-    border-radius: 10px;
-    padding: 14px;
-    text-align: center;
-    color: var(--danger);
-    font-size: 14px;
-  }
-  .retry-btn {
-    margin-top: 10px;
-    padding: 8px 20px;
-    background: var(--danger);
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    font-size: 14px;
-    cursor: pointer;
-  }
-
-  /* ===== АНІМАЦІЯ ПОЯВИ ===== */
-  .fade-in {
-    animation: fadeIn 0.25s ease forwards;
-  }
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(6px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Заполнение Словарей</title>
+    <!-- Подключаем скрипт Telegram Web App -->
+    <script src="https://telegram.org"></script>
+    <style>
+        :root {
+            --tg-theme-bg-color: #ffffff;
+            --tg-theme-text-color: #000000;
+            --tg-theme-button-color: #2481cc;
+            --tg-theme-button-text-color: #ffffff;
+            --tg-theme-hint-color: #999999;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--tg-theme-bg-color);
+            color: var(--tg-theme-text-color);
+            margin: 0;
+            padding: 15px;
+            box-sizing: border-box;
+        }
+        .header {
+            margin-bottom: 15px;
+        }
+        h2 { margin: 0 0 5px 0; font-size: 20px; }
+        .sub-text { color: var(--tg-theme-hint-color); font-size: 14px; margin-bottom: 15px; }
+        select, input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+            box-sizing: border-box;
+            background: #fff;
+            color: #000;
+        }
+        .tabs {
+            display: flex;
+            gap: 5px;
+            margin: 15px 0;
+            background: #eee;
+            padding: 3px;
+            border-radius: 8px;
+        }
+        .tab-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            background: transparent;
+            font-size: 13px;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        .tab-btn.active {
+            background: #fff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .product-list { display: none; }
+        .product-list.active { display: block; }
+        .product-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .product-name { flex: 1; font-size: 15px; padding-right: 10px; }
+        .product-input { width: 80px; text-align: center; padding: 8px; }
+        .actions { margin-top: 20px; display: flex; flex-direction: column; gap: 10px; }
+        .btn {
+            background-color: var(--tg-theme-button-color);
+            color: var(--tg-theme-button-text-color);
+            border: none;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            text-align: center;
+        }
+        .btn-wa { background-color: #25D366; color: white; }
+    </style>
 </head>
 <body>
 
-<!-- ===== URL для n8n — ЗАМІНИТИ ===== -->
-<script>
-  const N8N_GET_URL  = 'https://n8n-el.ddns.net/webhook/rastarka-get';
-  const N8N_POST_URL = 'https://n8n-el.ddns.net/webhook/rastarka-post';
-</script>
-
-<div class="header">
-  <h1>🛒 Растарка</h1>
-  <p>Оформлення замовлення</p>
-</div>
-
-<div id="app">
-  <!-- Контент рендериться через JS -->
-</div>
-
-<script>
-// ===== ІНІЦІАЛІЗАЦІЯ TELEGRAM =====
-const tg = window.Telegram.WebApp;
-tg.expand();
-tg.ready();
-
-// Отримуємо tg_id користувача (або test_user при тесті в браузері)
-const TG_ID = tg.initDataUnsafe?.user?.id || 'test_user';
-const TG_NAME = tg.initDataUnsafe?.user?.first_name || 'Тест';
-
-// ===== СТАН ДОДАТКУ =====
-let catalog = {};       // Весь довідник з n8n
-let selectedRegion = '';
-let selectedTT = '';
-let selectedCategory = '';
-let selectedProduct = '';
-let quantity = 1;
-
-// ===== РЕНДЕР =====
-const app = document.getElementById('app');
-
-function render() {
-  app.innerHTML = `
-    <!-- РЕГІОН -->
-    <div class="card fade-in">
-      <div class="field-label">
-        <span class="step ${selectedRegion ? 'done' : ''}">1</span>
-        Регіон
-      </div>
-      <select id="sel-region" onchange="onRegionChange(this.value)">
-        <option value="">— Оберіть регіон —</option>
-        ${Object.keys(catalog).map(r =>
-          `<option value="${r}" ${selectedRegion===r?'selected':''}>${r}</option>`
-        ).join('')}
-      </select>
+    <div class="header">
+        <h2 id="region-title">Загрузка региона...</h2>
+        <div class="sub-text">Выберите торговую точку для заполнения</div>
+        
+        <select id="point-select">
+            <option value="">-- Выберите точку --</option>
+        </select>
     </div>
 
-    <!-- ТОРГОВА ТОЧКА -->
-    <div class="card fade-in" style="animation-delay:0.05s">
-      <div class="field-label">
-        <span class="step ${selectedTT ? 'done' : ''}">2</span>
-        Торгова точка
-      </div>
-      <select id="sel-tt" onchange="onTTChange(this.value)" ${!selectedRegion?'disabled':''}>
-        <option value="">— Оберіть ТТ —</option>
-        ${selectedRegion ? Object.keys(catalog[selectedRegion]||{}).map(tt =>
-          `<option value="${tt}" ${selectedTT===tt?'selected':''}>${tt}</option>`
-        ).join('') : ''}
-      </select>
+    <!-- Вкладки под ваши 3 категории товаров -->
+    <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('колбасы')">Колбасы</button>
+        <button class="tab-btn" onclick="switchTab('молоко_вес')">Молочные (вес)</button>
+        <button class="tab-btn" onclick="switchTab('молоко_шт')">Молочные (шт)</button>
     </div>
 
-    <!-- КАТЕГОРІЯ -->
-    <div class="card fade-in" style="animation-delay:0.08s">
-      <div class="field-label">
-        <span class="step ${selectedCategory ? 'done' : ''}">3</span>
-        Категорія
-      </div>
-      <select id="sel-category" onchange="onCategoryChange(this.value)" ${!selectedTT?'disabled':''}>
-        <option value="">— Оберіть категорію —</option>
-        ${selectedTT ? Object.keys(catalog[selectedRegion]?.[selectedTT]||{}).map(cat =>
-          `<option value="${cat}" ${selectedCategory===cat?'selected':''}>${cat}</option>`
-        ).join('') : ''}
-      </select>
+    <!-- Контейнеры для списков товаров -->
+    <div id="колбасы" class="product-list active"></div>
+    <div id="молоко_вес" class="product-list"></div>
+    <div id="молоко_шт" class="product-list"></div>
+
+    <div class="actions">
+        <!-- Кнопка для отправки данных обратно в n8n / Telegram -->
+        <button class="btn" id="submit-tg-btn" onclick="sendDataToTelegram()">Сохранить через Telegram</button>
+        <!-- Кнопка отправки готового текста в WhatsApp -->
+        <button class="btn btn-wa" onclick="sendDataToWhatsApp()">Отправить в WhatsApp</button>
     </div>
 
-    <!-- ТОВАР -->
-    <div class="card fade-in" style="animation-delay:0.11s">
-      <div class="field-label">
-        <span class="step ${selectedProduct ? 'done' : ''}">4</span>
-        Товар
-      </div>
-      <select id="sel-product" onchange="onProductChange(this.value)" ${!selectedCategory?'disabled':''}>
-        <option value="">— Оберіть товар —</option>
-        ${selectedCategory ? (catalog[selectedRegion]?.[selectedTT]?.[selectedCategory]||[]).map(p =>
-          `<option value="${p}" ${selectedProduct===p?'selected':''}>${p}</option>`
-        ).join('') : ''}
-      </select>
-    </div>
+    <script>
+        // Инициализация Telegram WebApp API
+        const tg = window.Telegram?.WebApp;
+        if (tg) {
+            tg.expand(); // Разворачиваем приложение на весь экран телефона
+            // Применяем цвета темы Telegram
+            document.documentElement.style.setProperty('--tg-theme-bg-color', tg.backgroundColor);
+            document.documentElement.style.setProperty('--tg-theme-text-color', tg.textColor);
+            document.documentElement.style.setProperty('--tg-theme-button-color', tg.buttonColor);
+            document.documentElement.style.setProperty('--tg-theme-button-text-color', tg.buttonTextColor);
+        } else {
+            // Если открыто просто в браузере, скрываем кнопку Telegram
+            document.getElementById('submit-tg-btn').style.display = 'none';
+        }
 
-    <!-- КІЛЬКІСТЬ -->
-    <div class="card fade-in" style="animation-delay:0.14s">
-      <div class="field-label">
-        <span class="step ${quantity>0&&selectedProduct ? 'done' : ''}">5</span>
-        Кількість (кг)
-      </div>
-      <div class="qty-row">
-        <button class="qty-btn" onclick="changeQty(-1)" ${!selectedProduct?'disabled':''}>−</button>
-        <input type="number" id="inp-qty" value="${quantity}" min="0.5" step="0.5"
-          oninput="onQtyInput(this.value)"
-          ${!selectedProduct?'disabled':''}
-        >
-        <span class="qty-unit">кг</span>
-        <button class="qty-btn" onclick="changeQty(1)" ${!selectedProduct?'disabled':''}>+</button>
-      </div>
-    </div>
+        // Сюда n8n будет отдавать ваш сгенерированный JSON (Укажите URL вашего Webhook n8n)
+        const N8N_WEBHOOK_URL = 'https://n8n-el.ddns.net';
+        let serverData = null;
 
-    <!-- ПІДСУМОК -->
-    <div class="summary ${selectedProduct && quantity > 0 ? 'visible' : ''}" id="summary">
-      <div class="summary-row"><span>Регіон</span><span>${selectedRegion||'—'}</span></div>
-      <div class="summary-row"><span>Торгова точка</span><span>${selectedTT||'—'}</span></div>
-      <div class="summary-row"><span>Товар</span><span>${selectedProduct||'—'}</span></div>
-      <div class="summary-row"><span>Кількість</span><span>${quantity} кг</span></div>
-    </div>
+        // Загрузка данных из n8n при старте страницы
+        async function loadData() {
+            try {
+                const response = await fetch(N8N_WEBHOOK_URL);
+                serverData = await response.json();
+                
+                // Отображаем регион
+                document.getElementById('region-title').innerText = `Регион: ${serverData.region}`;
+                
+                // Заполняем выпадающий список торговых точек
+                const select = document.getElementById('point-select');
+                Object.values(serverData.trading_points).forEach(point => {
+                    const opt = document.createElement('option');
+                    opt.value = point.id;
+                    opt.innerText = point.name;
+                    select.appendChild(opt);
+                });
 
-    <!-- КНОПКА -->
-    <button class="save-btn" id="btn-save"
-      onclick="saveData()"
-      ${!(selectedProduct && quantity > 0) ? 'disabled' : ''}
-    >
-      💾 Зберегти замовлення
-    </button>
-  `;
-}
+                // Вешаем событие изменения точки
+                select.addEventListener('change', renderProducts);
+            } catch (err) {
+                document.getElementById('region-title').innerText = "Ошибка загрузки данных";
+                console.error(err);
+            }
+        }
 
-// ===== ОБРОБНИКИ =====
-function onRegionChange(val) {
-  selectedRegion = val;
-  selectedTT = '';
-  selectedCategory = '';
-  selectedProduct = '';
-  quantity = 1;
-  render();
-}
+        // Переключение вкладок категорий
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.product-list').forEach(list => list.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        }
 
-function onTTChange(val) {
-  selectedTT = val;
-  selectedCategory = '';
-  selectedProduct = '';
-  quantity = 1;
-  render();
-}
+        // Рендеринг полей ввода товаров для выбранной точки
+        function renderProducts() {
+            const pointId = document.getElementById('point-select').value;
+            
+            const cats = {
+                "Колбасы": "колбасы",
+                "молочные вес": "молоко_вес",
+                "молочные шт": "молоко_шт"
+            };
 
-function onCategoryChange(val) {
-  selectedCategory = val;
-  selectedProduct = '';
-  quantity = 1;
-  render();
-}
+            // Очищаем старые списки
+            Object.values(cats).forEach(id => document.getElementById(id).innerHTML = '');
 
-function onProductChange(val) {
-  selectedProduct = val;
-  render();
-}
+            if (!pointId || !serverData) return;
 
-function changeQty(delta) {
-  quantity = Math.max(0.5, parseFloat((quantity + delta * 0.5).toFixed(1)));
-  render();
-}
+            // Наполняем вкладки товарами
+            Object.keys(cats).forEach(serverCatKey => {
+                const htmlId = cats[serverCatKey];
+                const container = document.getElementById(htmlId);
+                const products = serverData.products[serverCatKey] || [];
 
-function onQtyInput(val) {
-  const v = parseFloat(val);
-  if (!isNaN(v) && v > 0) quantity = v;
-}
+                products.forEach(prod => {
+                    // Берем текущее количество товара в таблице для этой точки или ставим 0
+                    const qty = prod.stock_by_points[pointId] || 0;
 
-// ===== ЗБЕРЕЖЕННЯ =====
-async function saveData() {
-  const btn = document.getElementById('btn-save');
-  btn.disabled = true;
-  btn.textContent = '⏳ Збереження...';
-  btn.classList.add('loading');
+                    const itemDiv = document.createElement('div');
+                    itemDiv.className = 'product-item';
+                    itemDiv.innerHTML = `
+                        <div class="product-name">${prod.name}</div>
+                        <input type="number" class="product-input" 
+                               data-name="${prod.name}" 
+                               data-cat="${serverCatKey}" 
+                               value="${qty}" min="0">
+                    `;
+                    container.appendChild(itemDiv);
+                });
+            });
+        }
 
-  const payload = {
-    tg_id:    TG_ID,
-    tg_name:  TG_NAME,
-    region:   selectedRegion,
-    tt:       selectedTT,
-    category: selectedCategory,
-    product:  selectedProduct,
-    quantity: quantity
-  };
+        // Собираем измененные пользователем данные из формы
+        function collectFormData() {
+            const pointId = document.getElementById('point-select').value;
+            const pointName = document.getElementById('point-select').options[document.getElementById('point-select').selectedIndex].text;
+            
+            if (!pointId) {
+                alert("Пожалуйста, выберите торговую точку!");
+                return null;
+            }
 
-  try {
-    const res = await fetch(N8N_POST_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
+            let updatedOrders = [];
+            document.querySelectorAll('.product-input').forEach(input => {
+                const val = parseFloat(input.value) || 0;
+                if (val >= 0) {
+                    updatedOrders.push({
+                        product: input.dataset.name,
+                        category: input.dataset.cat,
+                        quantity: val
+                    });
+                }
+            });
 
-    if (res.ok) {
-      tg.showAlert('✅ Замовлення збережено!', () => {
-        // Скидаємо форму для нового замовлення
-        selectedProduct = '';
-        selectedCategory = '';
-        quantity = 1;
-        render();
-      });
-    } else {
-      throw new Error('Сервер повернув помилку: ' + res.status);
-    }
-  } catch (err) {
-    tg.showAlert('❌ Помилка: ' + err.message);
-    btn.disabled = false;
-    btn.textContent = '💾 Зберегти замовлення';
-    btn.classList.remove('loading');
-  }
-}
+            return {
+                region: serverData.region,
+                point_id: pointId,
+                point_name: pointName,
+                orders: updatedOrders
+            };
+        }
 
-// ===== ЗАВАНТАЖЕННЯ ДОВІДНИКА =====
-async function loadCatalog() {
-  app.innerHTML = `
-    <div class="loader">
-      <div class="spinner"></div>
-      <span>Завантаження довідника...</span>
-    </div>
-  `;
+        // Сценарий 1: Отправка данных обратно в Telegram Bot (через WebApp интерфейс)
+        function sendDataToTelegram() {
+            const payload = collectFormData();
+            if (!payload) return;
 
-  try {
-    const res = await fetch(N8N_GET_URL);
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    catalog = await res.json();
-    render();
-  } catch (err) {
-    app.innerHTML = `
-      <div class="card">
-        <div class="error-block">
-          <div>❌ Не вдалося завантажити довідник</div>
-          <div style="font-size:12px;margin-top:4px;color:#991b1b">${err.message}</div>
-          <button class="retry-btn" onclick="loadCatalog()">Спробувати знову</button>
-        </div>
-      </div>
-    `;
-  }
-}
+            if (tg) {
+                // Метод отправляет JSON-строку обратно боту Telegram. 
+                // Бот поймает событие web_app_data и сможет передать его в n8n для записи в Google Таблицу
+                tg.sendData(JSON.stringify(payload));
+                tg.close();
+            }
+        }
 
-// ===== СТАРТ =====
-loadCatalog();
-</script>
+        // Сценарий 2: Формирование текстового отчета и отправка в WhatsApp
+        function sendDataToWhatsApp() {
+            const payload = collectFormData();
+            if (!payload) return;
+
+            // Формируем красивое текстовое сообщение для мессенджера
+            let message = `*Отчет по региону:* ${payload.region}\n`;
+            message += `*Точка:* ${payload.point_name}\n\n`;
+            
+            let hasData = false;
+            payload.orders.forEach(item => {
+                if (item.quantity > 0) {
+                    message += `• ${item.product}: *${item.quantity}*\n`;
+                    hasData = true;
+                }
+            });
+
+            if (!hasData) message += "Нет изменений или товаров.";
+
+            // Кодируем текст в URL и перенаправляем в WhatsApp API
+            const waUrl = `https://whatsapp.com{encodeURIComponent(message)}`;
+            window.open(waUrl, '_blank');
+        }
+
+        // Запуск загрузки данных при открытии страницы
+        loadData();
+    </script>
 </body>
 </html>
