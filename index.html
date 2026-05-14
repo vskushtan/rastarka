@@ -171,14 +171,18 @@
         }
 
         // Рендеринг полей ввода товаров для выбранной точки
-        function renderProducts() {
-    const pointId = document.getElementById('point-select').value;
-    
-    const cats = {
-        "Колбасы": "колбасы",
-        "молочные вес": "молоко_вес",
-        "молочные шт": "молоко_шт"
-    };
+function renderTradingPoints(points) {
+  const select = document.getElementById('trading-point');
+  select.innerHTML = '<option value="">-- Выберите точку --</option>';
+  
+  // Оскільки тепер ключами є назви колонок, правильно ітеруємо об'єкт
+  Object.values(points).forEach(point => {
+    const opt = document.createElement('option');
+    opt.value = point.id; // Передає "1", "2" тощо для форми
+    opt.textContent = point.name; // Виводить назву точки ("7-я Пересыпская")
+    select.appendChild(opt);
+  });
+}
 
     // Очищаем контейнеры перед отрисовкой
     Object.values(cats).forEach(id => {
