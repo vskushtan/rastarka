@@ -172,43 +172,51 @@
 
         // Рендеринг полей ввода товаров для выбранной точки
         function renderProducts() {
-            const pointId = document.getElementById('point-select').value;
-            
-            const cats = {
-                "Колбасы": "колбасы",
-                "молочные вес": "молоко_вес",
-                "молочные шт": "молоко_шт"
-            };
+    const pointId = document.getElementById('point-select').value;
+    
+    const cats = {
+        "Колбасы": "колбасы",
+        "молочные вес": "молоко_вес",
+        "молочные шт": "молоко_шт"
+    };
 
-            // Очищаем старые списки
-            Object.values(cats).forEach(id => document.getElementById(id).innerHTML = '');
+    // 1. Очищаем контейнеры перед новой отрисовкой
+    Object.values(cats).forEach(id => {
+        const el = document.getElementById(id);
+        if(el) el.innerHTML = '';
+    });
 
-            if (!pointId || !serverData) return;
+    // Если точка не выбрана, прерываем выполнение
+    if (!pointId || !serverData) return;
 
-            // Наполняем вкладки товарами
-            Object.keys(cats).forEach(serverCatKey => {
-                const htmlId = cats[serverCatKey];
-                const container = document.getElementById(htmlId);
-                const products = serverData.products[serverCatKey] || [];
+    // 2. Наполняем вкладки товарами
+    Object.keys(cats).forEach(serverCatKey => {
+        const htmlId = cats[serverCatKey];
+        const container = document.getElementById(htmlId);
+        if (!container) return;
 
-                products.forEach(prod => {
-                    // Берем текущее количество товара в таблице для этой точки или ставим 0
-                    const qty = prod.stock_by_points[pointId] || 0;
+        const products = serverData.products[serverCatKey] || [];
 
-                    const itemDiv = document.createElement('div');
-                    itemDiv.className = 'product-item';
-                    itemDiv.innerHTML = `
-                        <div class="product-name">${prod.name}</div>
-                        <input type="number" class="product-input" 
-                               data-name="${prod.name}" 
-                               data-cat="${serverCatKey}" 
-                               value="${qty}" min="0">
-                    `;
-                    container.appendChild(itemDiv);
-                });
-            });
-        }
+        products.forEach(prod => {
+            // Исправлено: если значения для точки нет, жестко ставим 0, а не ломаем рендер
+            const qty = (prod.stock_by_points && prod.stock_by_points[pointId] !== undefined) 
+                        ? prod.stock_by_points[pointId] 
+                        : 0;
 
+            const itemDiv = document.createElement('div');
+            itemDiv.className = 'product-item';
+            itemDiv.innerHTML = `
+                <div class="product-name">${prod.name}</div>
+                <input type="number" class="product-input" 
+                       data-name="${prod.name}" 
+                       data-cat="${serverCatKey}" 
+                       value="${qty}" min="0" step="any">
+            `;
+            container.appendChild(itemDiv);
+        });
+    });
+}
+        
         // Собираем измененные пользователем данные из формы
         function collectFormData() {
             const pointId = document.getElementById('point-select').value;
