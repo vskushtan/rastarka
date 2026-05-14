@@ -180,16 +180,14 @@
         "молочные шт": "молоко_шт"
     };
 
-    // 1. Очищаем контейнеры перед новой отрисовкой
+    // Очищаем контейнеры перед отрисовкой
     Object.values(cats).forEach(id => {
         const el = document.getElementById(id);
-        if(el) el.innerHTML = '';
+        if (el) el.innerHTML = '';
     });
 
-    // Если точка не выбрана, прерываем выполнение
     if (!pointId || !serverData) return;
 
-    // 2. Наполняем вкладки товарами
     Object.keys(cats).forEach(serverCatKey => {
         const htmlId = cats[serverCatKey];
         const container = document.getElementById(htmlId);
@@ -197,8 +195,13 @@
 
         const products = serverData.products[serverCatKey] || [];
 
+        // Безопасная проверка: если товаров в категории нет
+        if (products.length === 0) {
+            container.innerHTML = `<div class="sub-text" style="padding: 10px 0;">В этой категории нет товаров</div>`;
+            return;
+        }
+
         products.forEach(prod => {
-            // Исправлено: если значения для точки нет, жестко ставим 0, а не ломаем рендер
             const qty = (prod.stock_by_points && prod.stock_by_points[pointId] !== undefined) 
                         ? prod.stock_by_points[pointId] 
                         : 0;
@@ -215,8 +218,7 @@
             container.appendChild(itemDiv);
         });
     });
-}
-        
+}        
         // Собираем измененные пользователем данные из формы
         function collectFormData() {
             const pointId = document.getElementById('point-select').value;
