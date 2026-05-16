@@ -7,234 +7,322 @@
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#f4f6fb;--card:#fff;--primary:#1a56db;--primary2:#1e429f;--accent:#0ea5e9;--success:#16a34a;--danger:#dc2626;--text:#1e293b;--muted:#64748b;--border:#e2e8f0;--radius:16px;--shadow:0 4px 20px rgba(30,66,159,.08)}
+:root{--bg:#f4f6fb;--card:#fff;--primary:#1a56db;--accent:#0ea5e9;--success:#16a34a;--danger:#dc2626;--text:#1e293b;--muted:#64748b;--border:#e2e8f0;--radius:14px;--shadow:0 2px 12px rgba(30,66,159,.08)}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:12px 14px 40px}
-.hdr{display:flex;align-items:center;gap:10px;padding:10px 0 16px}
-.hdr-icon{width:42px;height:42px;background:linear-gradient(135deg,var(--primary),var(--accent));border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 4px 12px rgba(26,86,219,.3)}
-.hdr h1{font-size:20px;font-weight:800;color:var(--primary2)}
-.hdr p{font-size:12px;color:var(--muted);font-weight:600}
-.tabs{display:flex;gap:6px;margin-bottom:14px}
-.tab{flex:1;padding:10px 6px;border-radius:10px;border:2px solid var(--border);background:#fff;font-size:13px;font-weight:700;font-family:'Nunito',sans-serif;color:var(--muted);cursor:pointer;transition:all .2s;text-align:center;position:relative}
-.tab.active{border-color:var(--primary);background:var(--primary);color:#fff}
-.tab .cnt{display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;border-radius:9px;background:var(--danger);color:#fff;font-size:10px;font-weight:800;margin-left:4px;padding:0 4px}
-.tab.active .cnt{background:rgba(255,255,255,.3)}
-.card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:14px 16px;margin-bottom:10px;border:1px solid rgba(226,232,240,.8);animation:up .2s ease forwards;opacity:0}
-@keyframes up{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
-.lbl{display:flex;align-items:center;gap:8px;margin-bottom:10px}
-.lbl-n{width:22px;height:22px;border-radius:50%;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:var(--border);color:var(--muted);transition:background .2s,color .2s}
-.lbl-n.on{background:var(--primary);color:#fff}
-.lbl-n.done{background:var(--success);color:#fff}
-.lbl-t{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.7px;color:var(--muted)}
-.lbl-v{margin-left:auto;font-size:12px;font-weight:700;color:var(--primary);max-width:55%;text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-select{width:100%;padding:12px 40px 12px 14px;border:2px solid var(--border);border-radius:10px;font-size:15px;font-family:'Nunito',sans-serif;font-weight:600;color:var(--text);background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 12px center;appearance:none;cursor:pointer;outline:none;transition:border-color .2s,box-shadow .2s}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:12px 14px 60px}
+
+/* ШАПКА */
+.hdr{display:flex;align-items:center;gap:10px;padding:8px 0 14px}
+.hdr-icon{width:38px;height:38px;background:linear-gradient(135deg,var(--primary),var(--accent));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.hdr h1{font-size:18px;font-weight:800;color:#1e429f}
+.hdr p{font-size:11px;color:var(--muted);font-weight:600}
+
+/* ВИБІР ТТ */
+.card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:14px;margin-bottom:10px;border:1px solid var(--border)}
+.card-title{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);margin-bottom:10px}
+select{width:100%;padding:12px 40px 12px 14px;border:2px solid var(--border);border-radius:10px;font-size:15px;font-family:'Nunito',sans-serif;font-weight:700;color:var(--text);background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 12px center;appearance:none;cursor:pointer;outline:none;transition:border-color .2s}
 select:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(26,86,219,.1)}
-select:disabled{background-color:#f8fafc;color:#94a3b8;cursor:not-allowed}
-.qty-wrap{display:flex;align-items:center;gap:10px;margin-top:12px}
-.qty-btn{width:46px;height:46px;border-radius:10px;border:2px solid var(--border);background:#fff;font-size:24px;color:var(--primary);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s}
-.qty-btn:active{background:#eff6ff;border-color:var(--primary);transform:scale(.93)}
-input[type=number]{flex:1;padding:12px 10px;border:2px solid var(--border);border-radius:10px;font-size:20px;font-weight:800;font-family:'Nunito',sans-serif;text-align:center;color:var(--text);outline:none;-moz-appearance:textfield}
-input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none}
-input[type=number]:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(26,86,219,.1)}
-.qty-unit{font-size:15px;font-weight:700;color:var(--muted);flex-shrink:0}
-.btn-add{width:100%;padding:14px;border-radius:12px;border:none;background:linear-gradient(135deg,var(--success),#15803d);color:#fff;font-size:15px;font-weight:800;font-family:'Nunito',sans-serif;cursor:pointer;margin-top:14px;transition:all .2s;box-shadow:0 4px 14px rgba(22,163,74,.3)}
-.btn-add:disabled{background:#cbd5e1;color:#94a3b8;cursor:not-allowed;box-shadow:none}
-.btn-add:not(:disabled):active{transform:scale(.97)}
-.cart-empty{text-align:center;padding:32px;color:var(--muted);font-size:14px;font-weight:600}
-.cart-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)}
-.cart-item:last-child{border-bottom:none}
-.ci-info{flex:1;min-width:0}
-.ci-name{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.ci-meta{font-size:11px;color:var(--muted);font-weight:600;margin-top:2px}
-.ci-qty{font-size:15px;font-weight:800;color:var(--primary);flex-shrink:0}
-.ci-del{width:32px;height:32px;border-radius:8px;border:none;background:#fef2f2;color:var(--danger);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.btn-send{width:100%;padding:16px;border-radius:14px;border:none;background:linear-gradient(135deg,var(--primary),var(--accent));color:#fff;font-size:16px;font-weight:800;font-family:'Nunito',sans-serif;cursor:pointer;box-shadow:0 6px 20px rgba(26,86,219,.35);transition:all .2s;margin-top:4px}
-.btn-send:disabled{background:#cbd5e1;color:#94a3b8;cursor:not-allowed;box-shadow:none}
-.btn-send:not(:disabled):active{transform:scale(.97)}
-.loader{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 0;gap:16px;color:var(--muted);font-size:14px;font-weight:600}
-.spinner{width:40px;height:40px;border:3px solid var(--border);border-top-color:var(--primary);border-radius:50%;animation:spin .7s linear infinite}
+
+/* СЕКЦІЯ ТОВАРІВ */
+.section{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);margin-bottom:10px;border:1px solid var(--border);overflow:hidden}
+.section-hdr{background:linear-gradient(135deg,var(--primary),var(--accent));color:#fff;padding:10px 14px;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.6px}
+.section-hdr.green{background:linear-gradient(135deg,var(--success),#15803d)}
+.section-hdr.teal{background:linear-gradient(135deg,#0891b2,#0284c7)}
+
+/* ТАБЛИЦЯ ТОВАРІВ */
+.prod-table{width:100%;border-collapse:collapse}
+.prod-table tr{border-bottom:1px solid var(--border)}
+.prod-table tr:last-child{border-bottom:none}
+.prod-table tr:nth-child(even){background:#f8fafc}
+.prod-name{padding:10px 8px 10px 14px;font-size:13px;font-weight:600;color:var(--text);line-height:1.3}
+.prod-qty{padding:6px 14px 6px 4px;width:90px;text-align:right}
+.prod-qty input{width:82px;padding:7px 10px;border:2px solid var(--border);border-radius:8px;font-size:15px;font-weight:800;font-family:'Nunito',sans-serif;text-align:center;color:var(--text);outline:none;background:#fff;transition:border-color .2s;-moz-appearance:textfield}
+.prod-qty input::-webkit-inner-spin-button,.prod-qty input::-webkit-outer-spin-button{-webkit-appearance:none}
+.prod-qty input:focus{border-color:var(--primary);box-shadow:0 0 0 2px rgba(26,86,219,.1)}
+.prod-qty input.filled{border-color:var(--success);background:#f0fdf4;color:var(--success)}
+.prod-unit{padding:0 14px 0 2px;font-size:11px;font-weight:600;color:var(--muted);white-space:nowrap;width:30px}
+
+/* КНОПКА */
+.btn-send{position:fixed;bottom:0;left:0;right:0;padding:16px;background:linear-gradient(135deg,var(--primary),var(--accent));color:#fff;font-size:16px;font-weight:800;font-family:'Nunito',sans-serif;border:none;cursor:pointer;box-shadow:0 -4px 20px rgba(26,86,219,.25);transition:all .2s;z-index:100}
+.btn-send:disabled{background:#94a3b8;cursor:not-allowed;box-shadow:none}
+.btn-send:not(:disabled):active{opacity:.9}
+.btn-send .cnt{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:11px;background:rgba(255,255,255,.25);font-size:12px;margin-left:6px;font-weight:800}
+
+/* ЛОАДЕР */
+.loader{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 0;gap:14px;color:var(--muted);font-size:14px;font-weight:600}
+.spinner{width:38px;height:38px;border:3px solid var(--border);border-top-color:var(--primary);border-radius:50%;animation:spin .7s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-.err{background:#fef2f2;border:1.5px solid #fecaca;border-radius:12px;padding:18px;text-align:center}
+.err{background:#fef2f2;border:1.5px solid #fecaca;border-radius:12px;padding:18px;text-align:center;margin:10px 0}
 .err p{color:var(--danger);font-weight:700;font-size:15px}
 .err small{color:#991b1b;font-size:12px;display:block;margin-top:4px}
-.btn-retry{margin-top:12px;padding:10px 24px;background:var(--danger);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;font-family:'Nunito',sans-serif;cursor:pointer}
-.prog{display:flex;gap:4px;margin-bottom:14px}
-.ps{flex:1;height:4px;border-radius:2px;background:var(--border);transition:background .3s}
-.ps.done{background:var(--success)}.ps.on{background:var(--primary)}
+.btn-retry{margin-top:10px;padding:9px 22px;background:var(--danger);color:#fff;border:none;border-radius:9px;font-size:14px;font-weight:700;font-family:'Nunito',sans-serif;cursor:pointer}
+
+/* ПЛЕЙСХОЛДЕР */
+.placeholder{text-align:center;padding:40px 20px;color:var(--muted)}
+.placeholder .ico{font-size:48px;margin-bottom:10px}
+.placeholder p{font-size:14px;font-weight:600}
+.placeholder small{font-size:12px;margin-top:4px;display:block}
 </style>
 </head>
 <body>
+
 <div class="hdr">
   <div class="hdr-icon">🛒</div>
   <div><h1>Растарка</h1><p>Оформлення замовлення</p></div>
 </div>
+
 <div id="root"></div>
+
+<button class="btn-send" id="btn-send" onclick="sendOrder()" disabled>
+  📤 Відправити замовлення <span class="cnt" id="cnt">0</span>
+</button>
+
 <script>
+// ══════ НАЛАШТУВАННЯ ══════
 const N8N_GET_URL  = 'https://n8n-el.ddns.net/webhook/rastarka-get';
 const N8N_POST_URL = 'https://n8n-el.ddns.net/webhook/rastarka-post';
 
+// Всі торгові точки
+const ALL_TT = [
+  '7-я Пересыпская','Марсельская 82','Героев Сталинграда','Затонского',
+  'Обменник','Бачарова маркет','Сельский','Паустовского',
+  'Паустовского 2','Бочарова Аллея','Высоцкого','Фонтанка'
+];
+
+// Всі товари по секціях (з таблиці, повний список)
+const PRODUCTS = {
+  'Ковбаса': [
+    'Сардельки Улюблені','Сосиски Улюблені','Ковбаса  Миколаївська',
+    'Ковбаса Класична з салом','Ковбаса Закарпатська','Салямі Президентська',
+    'Сардельки Елітні','Сосиски Елітні','Ковбаса з Телятиною',
+    'Ковбаса Фірмова','Салямі Елітна','Ковбаса Купецька',
+    'Сосиски Міні','Сосиски Філейні','Сосиски з Моцарелою',
+    'Ковбаса Шинкова','Ковбаски Баварські','Салямі Міланська',
+    'Ковбаса Царська','Сардельки Віденські','Ковбаски Віденські',
+    'Сардельки з Моцарелою','Ковбаса Елітна','Салямі Царська',
+    'Ковбаски Фермерські','Ковбаса Куряча','Ковбаса Європейська',
+    'Ковбаса  Баликова','Салямі Королівська','Ковбаса Домашня на дровах',
+    'М`ясо Щока','М`ясо Домашнє','М`ясо Буженина','М`ясо Балик',
+    'Підчеревина Домашня','Підчеревина з Часником','Корм для тварин "Ласунчик"',
+    'Ковбаса  Шинкова вар. в/с','Сосиски Віденські вар в/с',
+    'Сардельки Фірмові вар. в/с','Салямі Галицька н/к в/с',
+    'Салямі Панська н/к в/с','Сосиски з Сиром вар. в/с',
+    'Сардельки з Сиром вар. в/с','Сардельки з Вершками вар. в/с',
+    'Салямі Фінська н/к в/с 1/2б','Салямі Краківська н/к в/с',
+    'Ковбаса Дрогобицька н/к ДСТУ','Ковбаса  Сервелат н/к в/с ДСТУ',
+    'Салямі з Телятиною н/к в/с','Ковбаса Шинкова н/к в/с',
+    'Шинка Баликова вар. в/с','Мілано с/к в/с',
+    'Старокиївська с/к в/с','Салямі Сенатор с/к в/с'
+  ],
+  'Молочка (вес)': [
+    'Сир Звенигородский кг','Сир Голландский кг','Сир Мраморный кг',
+    'Сир Маасдам кг','Сир Класичний кг','Сир Пряжене молоко кг',
+    'Сир Сметанковий кг','Сир Гауда кг','Сир копчений кг',
+    'Сир творог кг','Сир з родзинками кг','Сметана 5 кг',
+    'Майонез 67% кг','Плавленный Янтарь ведро кг',
+    'Грецький салат ваговий, за кг','Бринза Болгарська кг'
+  ],
+  'Молочка (шт)': [
+    'Сгущенка 0,5, за шт','Ириска 0,5, за шт','Плавленный, шт',
+    'Грецький салат, за шт','Сметана пленка, за шт',
+    'Масло Екстра 380 гр, за шт','Масло Вершкове 200 гр 83%, за шт',
+    'Масло Ваш Молочник 400 гр 73%, за шт','Масло Українське 200 гр 82%, за шт',
+    'Сирок глазурь, за шт','Моцарелла, за шт','Крем сир, за шт',
+    'Бринза, за шт','Сир  Плавлений 300 гр 60% , за шт',
+    'Закуска 100 гр, за шт','Йогурт Грецький за шт','Молоко 2,5% за шт'
+  ]
+};
+
+// ══════ СТАН ══════
 const tg = window.Telegram && window.Telegram.WebApp;
 if (tg) { tg.expand(); tg.ready(); }
 const TG_ID   = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user && tg.initDataUnsafe.user.id) || 'test_user';
 const TG_NAME = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user && tg.initDataUnsafe.user.first_name) || 'Тест';
 
-let catalog = {};
-let sel = {region:'',tt:'',category:'',product:'',productRow:null,productCol:null};
-let qty = 1;
-let cart = [];
-let view = 'form';
-const root = document.getElementById('root');
+let selectedTT = '';
+let catalog    = {}; // {tt: {product: {row, col}}}
+let values     = {}; // {productName: qty}
 
-function addToCart() {
-  if (!sel.product || qty <= 0) return;
-  var found = null;
-  for (var i=0;i<cart.length;i++) {
-    if (cart[i].row === sel.productRow && cart[i].col === sel.productCol) { found=i; break; }
+const root   = document.getElementById('root');
+const btnSend= document.getElementById('btn-send');
+const cntEl  = document.getElementById('cnt');
+
+// ══════ ЗАВАНТАЖЕННЯ КАТАЛОГУ ══════
+async function loadCatalog() {
+  root.innerHTML = '<div class="loader"><div class="spinner"></div><span>Завантаження...</span></div>';
+  try {
+    var res = await fetch(N8N_GET_URL);
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    catalog = await res.json();
+    renderPage();
+  } catch(err) {
+    root.innerHTML = '<div class="err"><p>Не вдалося завантажити</p><small>'+err.message+'</small><button class="btn-retry" onclick="loadCatalog()">🔄 Повторити</button></div>';
   }
-  if (found !== null) {
-    cart[found].quantity = qty;
-  } else {
-    cart.push({region:sel.region,tt:sel.tt,category:sel.category,product:sel.product,row:sel.productRow,col:sel.productCol,quantity:qty});
-  }
-  sel.product=''; sel.productRow=null; sel.productCol=null; qty=1;
-  render();
 }
 
-function removeFromCart(idx) { cart.splice(idx,1); render(); }
-
-function badge(n,val,isCur) {
-  return '<span class="lbl-n '+(val?'done':isCur?'on':'')+'">'+(val?'&#10003;':n)+'</span>';
-}
-
-function prog(vals) {
-  var cur=vals.findIndex(function(v){return !v;});
-  return '<div class="prog">'+vals.map(function(v,i){return '<div class="ps '+(v?'done':i===cur?'on':'')+'"></div>';}).join('')+'</div>';
-}
-
-function renderForm() {
-  var regions = Object.keys(catalog);
-  var tts  = sel.region   ? Object.keys(catalog[sel.region]||{}) : [];
-  var cats = sel.tt       ? Object.keys((catalog[sel.region]||{})[sel.tt]||{}) : [];
-  var prods= sel.category ? (((catalog[sel.region]||{})[sel.tt]||{})[sel.category]||[]) : [];
-  var step = !sel.region?1:!sel.tt?2:!sel.category?3:!sel.product?4:5;
-  var canAdd = !!(sel.product && qty>0);
-
-  return prog([!!sel.region,!!sel.tt,!!sel.category,!!sel.product])+
-
-  '<div class="card">'+
-    '<div class="lbl">'+badge(1,sel.region,step===1)+'<span class="lbl-t">Регіон</span>'+(sel.region?'<span class="lbl-v">'+sel.region+'</span>':'')+'</div>'+
-    '<select onchange="onRegion(this.value)"><option value="">— Оберіть регіон —</option>'+
-    regions.map(function(r){return '<option value="'+r+'"'+(sel.region===r?' selected':'')+'>'+r+'</option>';}).join('')+
-    '</select></div>'+
-
-  '<div class="card">'+
-    '<div class="lbl">'+badge(2,sel.tt,step===2)+'<span class="lbl-t">Торгова точка</span>'+(sel.tt?'<span class="lbl-v">'+sel.tt+'</span>':'')+'</div>'+
-    '<select onchange="onTT(this.value)"'+(!sel.region?' disabled':'')+'>'+
-    '<option value="">— Оберіть ТТ —</option>'+
-    tts.map(function(t){return '<option value="'+t+'"'+(sel.tt===t?' selected':'')+'>'+t+'</option>';}).join('')+
-    '</select></div>'+
-
-  '<div class="card">'+
-    '<div class="lbl">'+badge(3,sel.category,step===3)+'<span class="lbl-t">Категорія</span>'+(sel.category?'<span class="lbl-v">'+sel.category+'</span>':'')+'</div>'+
-    '<select onchange="onCat(this.value)"'+(!sel.tt?' disabled':'')+'>'+
-    '<option value="">— Оберіть категорію —</option>'+
-    cats.map(function(c){return '<option value="'+c+'"'+(sel.category===c?' selected':'')+'>'+c+'</option>';}).join('')+
-    '</select></div>'+
-
-  '<div class="card">'+
-    '<div class="lbl">'+badge(4,sel.product,step===4)+'<span class="lbl-t">Товар</span>'+(sel.product?'<span class="lbl-v">'+sel.product+'</span>':'')+'</div>'+
-    '<select onchange="onProd(this)"'+(!sel.category?' disabled':'')+'>'+
-    '<option value="">— Оберіть товар —</option>'+
-    prods.map(function(p){return '<option value="'+p.name+'" data-row="'+p.row+'" data-col="'+p.col+'"'+(sel.product===p.name?' selected':'')+'>'+p.name+'</option>';}).join('')+
-    '</select>'+
-    (sel.product?
-      '<div class="qty-wrap">'+
-        '<button class="qty-btn" onclick="chQty(-0.5)">&#8722;</button>'+
-        '<input type="number" value="'+qty+'" min="0.5" step="0.5" oninput="onQI(this.value)">'+
-        '<span class="qty-unit">кг</span>'+
-        '<button class="qty-btn" onclick="chQty(0.5)">+</button>'+
-      '</div>':'')+
-    '<button class="btn-add" onclick="addToCart()"'+(!canAdd?' disabled':'')+'>&#128722; Додати в кошик</button>'+
-  '</div>';
-}
-
-function renderCart() {
-  if (cart.length===0) {
-    return '<div class="card"><div class="cart-empty"><div style="font-size:40px;margin-bottom:8px">&#128722;</div><div>Кошик порожній</div><div style="font-size:12px;margin-top:4px">Додайте товари у формі</div></div></div>';
-  }
-  var rows = cart.map(function(item,idx){
-    return '<div class="cart-item">'+
-      '<div class="ci-info"><div class="ci-name">'+item.product+'</div><div class="ci-meta">'+item.tt+' &middot; '+item.category+'</div></div>'+
-      '<span class="ci-qty">'+item.quantity+' кг</span>'+
-      '<button class="ci-del" onclick="removeFromCart('+idx+')">&#x2715;</button>'+
+// ══════ РЕНДЕР СТОРІНКИ ══════
+function renderPage() {
+  var ttSelect =
+    '<div class="card">' +
+      '<div class="card-title">🏪 Торгова точка</div>' +
+      '<select id="tt-select" onchange="onTTChange(this.value)">' +
+        '<option value="">— Оберіть торгову точку —</option>' +
+        ALL_TT.map(function(tt) {
+          return '<option value="'+tt+'"'+(selectedTT===tt?' selected':'')+'>'+tt+'</option>';
+        }).join('') +
+      '</select>' +
     '</div>';
-  }).join('');
-  return '<div class="card">'+rows+'</div>'+
-    '<button class="btn-send" onclick="sendOrder()">&#128228; Відправити замовлення ('+cart.length+')</button>';
+
+  var products = '';
+  if (selectedTT) {
+    products = renderProducts();
+  } else {
+    products =
+      '<div class="placeholder">' +
+        '<div class="ico">☝️</div>' +
+        '<p>Оберіть торгову точку</p>' +
+        '<small>Після вибору з\'явиться список товарів</small>' +
+      '</div>';
+  }
+
+  root.innerHTML = ttSelect + products;
+  updateSendBtn();
 }
 
-function render() {
-  var n = cart.length;
-  root.innerHTML =
-    '<div class="tabs">'+
-      '<div class="tab'+(view==='form'?' active':'')+'" onclick="sw(\'form\')">&#128221; Форма</div>'+
-      '<div class="tab'+(view==='cart'?' active':'')+'" onclick="sw(\'cart\')">&#128722; Кошик'+(n>0?'<span class="cnt">'+n+'</span>':'')+'</div>'+
-    '</div>'+
-    (view==='form'?renderForm():renderCart());
+// ══════ РЕНДЕР ТОВАРІВ ══════
+function renderProducts() {
+  var sections = {
+    'Ковбаса':        { icon: '🥩', cls: '' },
+    'Молочка (вес)':  { icon: '🧀', cls: 'green' },
+    'Молочка (шт)':   { icon: '🥛', cls: 'teal' }
+  };
+
+  var html = '';
+  for (var sec in sections) {
+    var s = sections[sec];
+    var prods = PRODUCTS[sec] || [];
+    html +=
+      '<div class="section">' +
+        '<div class="section-hdr '+s.cls+'">'+s.icon+' '+sec+'</div>' +
+        '<table class="prod-table">';
+
+    for (var i=0; i<prods.length; i++) {
+      var pname = prods[i];
+      var val   = values[pname] || '';
+      var isFilled = val && val !== '' && val !== '0';
+      // Одиниця вимірювання
+      var unit = sec === 'Ковбаса' ? 'кг' : sec === 'Молочка (вес)' ? 'кг' : 'шт';
+
+      html +=
+        '<tr>' +
+          '<td class="prod-name">'+pname+'</td>' +
+          '<td class="prod-qty">' +
+            '<input type="number" min="0" step="'+(sec==='Молочка (шт)'?'1':'0.5')+'"' +
+              ' placeholder="0"' +
+              ' value="'+(isFilled?val:'')+'"' +
+              ' class="'+(isFilled?'filled':'')+'"' +
+              ' oninput="onInput(this,\''+esc(pname)+'\')"' +
+              ' onchange="onInput(this,\''+esc(pname)+'\')"' +
+            '>' +
+          '</td>' +
+          '<td class="prod-unit">'+unit+'</td>' +
+        '</tr>';
+    }
+
+    html += '</table></div>';
+  }
+  return html;
 }
 
-function sw(v){view=v;render();}
-async function onRegion(v){
-  sel = {region:v,tt:'',category:'',product:'',productRow:null,productCol:null};
-  qty = 1;
+function esc(s) { return s.replace(/'/g, "\\'").replace(/"/g, '&quot;'); }
 
-  await loadCatalog(); // ← вот тут
+// ══════ ОБРОБНИКИ ══════
+function onTTChange(v) {
+  selectedTT = v;
+  values = {};
+  renderPage();
 }
-function onTT(v){sel.tt=v;sel.category='';sel.product='';sel.productRow=null;sel.productCol=null;qty=1;render();}
-function onCat(v){sel.category=v;sel.product='';sel.productRow=null;sel.productCol=null;qty=1;render();}
-function onProd(el){
-  sel.product=el.value;
-  var opt=el.options[el.selectedIndex];
-  sel.productRow=opt?opt.dataset.row:null;
-  sel.productCol=opt?opt.dataset.col:null;
-  render();
-}
-function chQty(d){qty=Math.max(0.5,parseFloat((qty+d).toFixed(1)));render();}
-function onQI(v){var n=parseFloat(v);if(!isNaN(n)&&n>0)qty=n;}
 
+function onInput(el, pname) {
+  var v = parseFloat(el.value);
+  if (!isNaN(v) && v > 0) {
+    values[pname] = v;
+    el.classList.add('filled');
+  } else {
+    delete values[pname];
+    el.classList.remove('filled');
+  }
+  updateSendBtn();
+}
+
+function updateSendBtn() {
+  var n = Object.keys(values).length;
+  cntEl.textContent = n;
+  btnSend.disabled = !(selectedTT && n > 0);
+}
+
+// ══════ ВІДПРАВКА ══════
 async function sendOrder() {
-  if(cart.length===0)return;
-  var btn=root.querySelector('.btn-send');
-  if(btn){btn.disabled=true;btn.textContent='Відправка...';}
-  var payload={tg_id:String(TG_ID),tg_name:TG_NAME,cart:cart};
-  try{
-    var res=await fetch(N8N_POST_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
-    if(!res.ok)throw new Error('Сервер: '+res.status);
-    var sum=cart.map(function(i){return i.product+' — '+i.quantity+' кг';}).join('\n');
-    var msg='Замовлення відправлено!\n\n'+sum;
-    var done=function(){cart=[];sel={region:'',tt:'',category:'',product:'',productRow:null,productCol:null};qty=1;view='form';render();};
-    alert(msg); done();
-  }catch(err){
-    var m='Помилка: '+err.message;
-    alert(m);
-    if(btn){btn.disabled=false;btn.textContent='Відправити замовлення ('+cart.length+')';}
+  var n = Object.keys(values).length;
+  if (!selectedTT || n === 0) return;
+
+  btnSend.disabled = true;
+  btnSend.textContent = '⏳ Відправка...';
+
+  // Формуємо масив позицій кошика
+  // Для кожного товару знаходимо row і col з каталогу
+  var cartItems = [];
+  var ttCatalog = catalog[selectedTT] || {};
+
+  for (var pname in values) {
+    var qty = values[pname];
+    var info = ttCatalog[pname];
+    if (!info) continue; // товар є в списку але не в каталозі для цієї ТТ
+    cartItems.push({
+      product:  pname,
+      row:      info.row,
+      col:      selectedTT,
+      quantity: qty
+    });
+  }
+
+  if (cartItems.length === 0) {
+    alert('Не знайдено товарів в каталозі для цієї ТТ. Перевірте налаштування.');
+    btnSend.disabled = false;
+    btnSend.innerHTML = '📤 Відправити замовлення <span class="cnt" id="cnt">'+n+'</span>';
+    return;
+  }
+
+  var payload = {
+    tg_id:   String(TG_ID),
+    tg_name: TG_NAME,
+    tt:      selectedTT,
+    cart:    cartItems
+  };
+
+  try {
+    var res = await fetch(N8N_POST_URL, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(payload)
+    });
+    if (!res.ok) throw new Error('Сервер: ' + res.status);
+
+    var sum = cartItems.map(function(i){return '• '+i.product+' — '+i.quantity;}).join('\n');
+    alert('✅ Замовлення відправлено!\nТТ: '+selectedTT+'\n\n'+sum);
+
+    // Скидаємо
+    values = {};
+    renderPage();
+    btnSend.innerHTML = '📤 Відправити замовлення <span class="cnt" id="cnt">0</span>';
+
+  } catch(err) {
+    alert('❌ Помилка: ' + err.message);
+    btnSend.disabled = false;
+    btnSend.innerHTML = '📤 Відправити замовлення <span class="cnt" id="cnt">'+n+'</span>';
   }
 }
 
-async function loadCatalog(){
-  root.innerHTML='<div class="loader"><div class="spinner"></div><span>Завантаження...</span></div>';
-  try{
-    var res = await fetch(
-      N8N_GET_URL + '?region=' + encodeURIComponent(sel.region)
-    );
-    if(!res.ok)throw new Error('HTTP '+res.status);
-    catalog=await res.json();
-    delete catalog['Інше'];
-    render();
-  }catch(err){
-    root.innerHTML='<div class="card"><div class="err"><p>Не вдалося завантажити</p><small>'+err.message+'</small><button class="btn-retry" onclick="loadCatalog()">Спробувати знову</button></div></div>';
-  }
-}
 loadCatalog();
 </script>
 </body>
