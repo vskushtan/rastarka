@@ -184,7 +184,12 @@ function render() {
 }
 
 function sw(v){view=v;render();}
-function onRegion(v){sel={region:v,tt:'',category:'',product:'',productRow:null,productCol:null};qty=1;render();}
+async function onRegion(v){
+  sel = {region:v,tt:'',category:'',product:'',productRow:null,productCol:null};
+  qty = 1;
+
+  await loadCatalog(); // ← вот тут
+}
 function onTT(v){sel.tt=v;sel.category='';sel.product='';sel.productRow=null;sel.productCol=null;qty=1;render();}
 function onCat(v){sel.category=v;sel.product='';sel.productRow=null;sel.productCol=null;qty=1;render();}
 function onProd(el){
@@ -219,7 +224,9 @@ async function sendOrder() {
 async function loadCatalog(){
   root.innerHTML='<div class="loader"><div class="spinner"></div><span>Завантаження...</span></div>';
   try{
-    const res = await fetch(N8N_GET_URL + '?region=' + encodeURIComponent(selectedRegion));
+    var res = await fetch(
+      N8N_GET_URL + '?region=' + encodeURIComponent(sel.region)
+    );
     if(!res.ok)throw new Error('HTTP '+res.status);
     catalog=await res.json();
     delete catalog['Інше'];
