@@ -1,297 +1,234 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="uk">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Заполнение Словарей</title>
-    <!-- Подключаем скрипт Telegram Web App -->
-    <script src="https://telegram.org"></script>
-    <style>
-        :root {
-            --tg-theme-bg-color: #ffffff;
-            --tg-theme-text-color: #000000;
-            --tg-theme-button-color: #2481cc;
-            --tg-theme-button-text-color: #ffffff;
-            --tg-theme-hint-color: #999999;
-        }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--tg-theme-bg-color);
-            color: var(--tg-theme-text-color);
-            margin: 0;
-            padding: 15px;
-            box-sizing: border-box;
-        }
-        .header {
-            margin-bottom: 15px;
-        }
-        h2 { margin: 0 0 5px 0; font-size: 20px; }
-        .sub-text { color: var(--tg-theme-hint-color); font-size: 14px; margin-bottom: 15px; }
-        select, input {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            font-size: 16px;
-            box-sizing: border-box;
-            background: #fff;
-            color: #000;
-        }
-        .tabs {
-            display: flex;
-            gap: 5px;
-            margin: 15px 0;
-            background: #eee;
-            padding: 3px;
-            border-radius: 8px;
-        }
-        .tab-btn {
-            flex: 1;
-            padding: 10px;
-            border: none;
-            background: transparent;
-            font-size: 13px;
-            font-weight: bold;
-            border-radius: 6px;
-            cursor: pointer;
-        }
-        .tab-btn.active {
-            background: #fff;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        .product-list { display: none; }
-        .product-list.active { display: block; }
-        .product-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 0;
-            border-bottom: 1px solid #eee;
-        }
-        .product-name { flex: 1; font-size: 15px; padding-right: 10px; }
-        .product-input { width: 80px; text-align: center; padding: 8px; }
-        .actions { margin-top: 20px; display: flex; flex-direction: column; gap: 10px; }
-        .btn {
-            background-color: var(--tg-theme-button-color);
-            color: var(--tg-theme-button-text-color);
-            border: none;
-            padding: 15px;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            width: 100%;
-            text-align: center;
-        }
-        .btn-wa { background-color: #25D366; color: white; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Растарка</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f4f6fb;--card:#fff;--primary:#1a56db;--primary2:#1e429f;--accent:#0ea5e9;--success:#16a34a;--danger:#dc2626;--text:#1e293b;--muted:#64748b;--border:#e2e8f0;--radius:16px;--shadow:0 4px 20px rgba(30,66,159,.08)}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:12px 14px 40px}
+.hdr{display:flex;align-items:center;gap:10px;padding:10px 0 16px}
+.hdr-icon{width:42px;height:42px;background:linear-gradient(135deg,var(--primary),var(--accent));border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 4px 12px rgba(26,86,219,.3)}
+.hdr h1{font-size:20px;font-weight:800;color:var(--primary2)}
+.hdr p{font-size:12px;color:var(--muted);font-weight:600}
+.tabs{display:flex;gap:6px;margin-bottom:14px}
+.tab{flex:1;padding:10px 6px;border-radius:10px;border:2px solid var(--border);background:#fff;font-size:13px;font-weight:700;font-family:'Nunito',sans-serif;color:var(--muted);cursor:pointer;transition:all .2s;text-align:center;position:relative}
+.tab.active{border-color:var(--primary);background:var(--primary);color:#fff}
+.tab .cnt{display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;border-radius:9px;background:var(--danger);color:#fff;font-size:10px;font-weight:800;margin-left:4px;padding:0 4px}
+.tab.active .cnt{background:rgba(255,255,255,.3)}
+.card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:14px 16px;margin-bottom:10px;border:1px solid rgba(226,232,240,.8);animation:up .2s ease forwards;opacity:0}
+@keyframes up{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.lbl{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.lbl-n{width:22px;height:22px;border-radius:50%;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:var(--border);color:var(--muted);transition:background .2s,color .2s}
+.lbl-n.on{background:var(--primary);color:#fff}
+.lbl-n.done{background:var(--success);color:#fff}
+.lbl-t{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.7px;color:var(--muted)}
+.lbl-v{margin-left:auto;font-size:12px;font-weight:700;color:var(--primary);max-width:55%;text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+select{width:100%;padding:12px 40px 12px 14px;border:2px solid var(--border);border-radius:10px;font-size:15px;font-family:'Nunito',sans-serif;font-weight:600;color:var(--text);background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 12px center;appearance:none;cursor:pointer;outline:none;transition:border-color .2s,box-shadow .2s}
+select:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(26,86,219,.1)}
+select:disabled{background-color:#f8fafc;color:#94a3b8;cursor:not-allowed}
+.qty-wrap{display:flex;align-items:center;gap:10px;margin-top:12px}
+.qty-btn{width:46px;height:46px;border-radius:10px;border:2px solid var(--border);background:#fff;font-size:24px;color:var(--primary);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s}
+.qty-btn:active{background:#eff6ff;border-color:var(--primary);transform:scale(.93)}
+input[type=number]{flex:1;padding:12px 10px;border:2px solid var(--border);border-radius:10px;font-size:20px;font-weight:800;font-family:'Nunito',sans-serif;text-align:center;color:var(--text);outline:none;-moz-appearance:textfield}
+input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none}
+input[type=number]:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(26,86,219,.1)}
+.qty-unit{font-size:15px;font-weight:700;color:var(--muted);flex-shrink:0}
+.btn-add{width:100%;padding:14px;border-radius:12px;border:none;background:linear-gradient(135deg,var(--success),#15803d);color:#fff;font-size:15px;font-weight:800;font-family:'Nunito',sans-serif;cursor:pointer;margin-top:14px;transition:all .2s;box-shadow:0 4px 14px rgba(22,163,74,.3)}
+.btn-add:disabled{background:#cbd5e1;color:#94a3b8;cursor:not-allowed;box-shadow:none}
+.btn-add:not(:disabled):active{transform:scale(.97)}
+.cart-empty{text-align:center;padding:32px;color:var(--muted);font-size:14px;font-weight:600}
+.cart-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)}
+.cart-item:last-child{border-bottom:none}
+.ci-info{flex:1;min-width:0}
+.ci-name{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ci-meta{font-size:11px;color:var(--muted);font-weight:600;margin-top:2px}
+.ci-qty{font-size:15px;font-weight:800;color:var(--primary);flex-shrink:0}
+.ci-del{width:32px;height:32px;border-radius:8px;border:none;background:#fef2f2;color:var(--danger);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.btn-send{width:100%;padding:16px;border-radius:14px;border:none;background:linear-gradient(135deg,var(--primary),var(--accent));color:#fff;font-size:16px;font-weight:800;font-family:'Nunito',sans-serif;cursor:pointer;box-shadow:0 6px 20px rgba(26,86,219,.35);transition:all .2s;margin-top:4px}
+.btn-send:disabled{background:#cbd5e1;color:#94a3b8;cursor:not-allowed;box-shadow:none}
+.btn-send:not(:disabled):active{transform:scale(.97)}
+.loader{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 0;gap:16px;color:var(--muted);font-size:14px;font-weight:600}
+.spinner{width:40px;height:40px;border:3px solid var(--border);border-top-color:var(--primary);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.err{background:#fef2f2;border:1.5px solid #fecaca;border-radius:12px;padding:18px;text-align:center}
+.err p{color:var(--danger);font-weight:700;font-size:15px}
+.err small{color:#991b1b;font-size:12px;display:block;margin-top:4px}
+.btn-retry{margin-top:12px;padding:10px 24px;background:var(--danger);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;font-family:'Nunito',sans-serif;cursor:pointer}
+.prog{display:flex;gap:4px;margin-bottom:14px}
+.ps{flex:1;height:4px;border-radius:2px;background:var(--border);transition:background .3s}
+.ps.done{background:var(--success)}.ps.on{background:var(--primary)}
+</style>
 </head>
 <body>
+<div class="hdr">
+  <div class="hdr-icon">🛒</div>
+  <div><h1>Растарка</h1><p>Оформлення замовлення</p></div>
+</div>
+<div id="root"></div>
+<script>
+const N8N_GET_URL  = 'https://n8n-el.ddns.net/webhook/rastarka-get';
+const N8N_POST_URL = 'https://n8n-el.ddns.net/webhook/rastarka-post';
 
-    <div class="header">
-        <h2 id="region-title">Загрузка региона...</h2>
-        <div class="sub-text">Выберите торговую точку для заполнения</div>
-        
-        <select id="point-select">
-            <option value="">-- Выберите точку --</option>
-        </select>
-    </div>
+const tg = window.Telegram && window.Telegram.WebApp;
+if (tg) { tg.expand(); tg.ready(); }
+const TG_ID   = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user && tg.initDataUnsafe.user.id) || 'test_user';
+const TG_NAME = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user && tg.initDataUnsafe.user.first_name) || 'Тест';
 
-    <!-- Вкладки под ваши 3 категории товаров -->
-    <div class="tabs">
-        <button class="tab-btn active" onclick="switchTab('колбасы')">Колбасы</button>
-        <button class="tab-btn" onclick="switchTab('молоко_вес')">Молочные (вес)</button>
-        <button class="tab-btn" onclick="switchTab('молоко_шт')">Молочные (шт)</button>
-    </div>
+let catalog = {};
+let sel = {region:'',tt:'',category:'',product:'',productRow:null,productCol:null};
+let qty = 1;
+let cart = [];
+let view = 'form';
+const root = document.getElementById('root');
 
-    <!-- Контейнеры для списков товаров -->
-    <div id="колбасы" class="product-list active"></div>
-    <div id="молоко_вес" class="product-list"></div>
-    <div id="молоко_шт" class="product-list"></div>
-
-    <div class="actions">
-        <!-- Кнопка для отправки данных обратно в n8n / Telegram -->
-        <button class="btn" id="submit-tg-btn" onclick="sendDataToTelegram()">Сохранить через Telegram</button>
-        <!-- Кнопка отправки готового текста в WhatsApp -->
-        <button class="btn btn-wa" onclick="sendDataToWhatsApp()">Отправить в WhatsApp</button>
-    </div>
-
-    <script>
-        // Инициализация Telegram WebApp API
-        const tg = window.Telegram?.WebApp;
-        if (tg) {
-            tg.expand(); // Разворачиваем приложение на весь экран телефона
-            // Применяем цвета темы Telegram
-            document.documentElement.style.setProperty('--tg-theme-bg-color', tg.backgroundColor);
-            document.documentElement.style.setProperty('--tg-theme-text-color', tg.textColor);
-            document.documentElement.style.setProperty('--tg-theme-button-color', tg.buttonColor);
-            document.documentElement.style.setProperty('--tg-theme-button-text-color', tg.buttonTextColor);
-        } else {
-            // Если открыто просто в браузере, скрываем кнопку Telegram
-            document.getElementById('submit-tg-btn').style.display = 'none';
-        }
-
-        // Сюда n8n будет отдавать ваш сгенерированный JSON (Укажите URL вашего Webhook n8n)
-        const N8N_WEBHOOK_URL = 'https://n8n-el.ddns.net';
-        let serverData = null;
-
-        // Загрузка данных из n8n при старте страницы
-        async function loadData() {
-            try {
-                const response = await fetch(N8N_WEBHOOK_URL);
-                serverData = await response.json();
-                
-                // Отображаем регион
-                document.getElementById('region-title').innerText = `Регион: ${serverData.region}`;
-                
-                // Заполняем выпадающий список торговых точек
-                const select = document.getElementById('point-select');
-                Object.values(serverData.trading_points).forEach(point => {
-                    const opt = document.createElement('option');
-                    opt.value = point.id;
-                    opt.innerText = point.name;
-                    select.appendChild(opt);
-                });
-
-                // Вешаем событие изменения точки
-                select.addEventListener('change', renderProducts);
-            } catch (err) {
-                document.getElementById('region-title').innerText = "Ошибка загрузки данных";
-                console.error(err);
-            }
-        }
-
-        // Переключение вкладок категорий
-        function switchTab(tabId) {
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            document.querySelectorAll('.product-list').forEach(list => list.classList.remove('active'));
-            
-            event.target.classList.add('active');
-            document.getElementById(tabId).classList.add('active');
-        }
-
-        // Рендеринг полей ввода товаров для выбранной точки
-function renderTradingPoints(points) {
-  const select = document.getElementById('trading-point');
-  select.innerHTML = '<option value="">-- Выберите точку --</option>';
-  
-  // Оскільки тепер ключами є назви колонок, правильно ітеруємо об'єкт
-  Object.values(points).forEach(point => {
-    const opt = document.createElement('option');
-    opt.value = point.id; // Передає "1", "2" тощо для форми
-    opt.textContent = point.name; // Виводить назву точки ("7-я Пересыпская")
-    select.appendChild(opt);
-  });
+function addToCart() {
+  if (!sel.product || qty <= 0) return;
+  var found = null;
+  for (var i=0;i<cart.length;i++) {
+    if (cart[i].row === sel.productRow && cart[i].col === sel.productCol) { found=i; break; }
+  }
+  if (found !== null) {
+    cart[found].quantity = qty;
+  } else {
+    cart.push({region:sel.region,tt:sel.tt,category:sel.category,product:sel.product,row:sel.productRow,col:sel.productCol,quantity:qty});
+  }
+  sel.product=''; sel.productRow=null; sel.productCol=null; qty=1;
+  render();
 }
 
-    // Очищаем контейнеры перед отрисовкой
-    Object.values(cats).forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.innerHTML = '';
-    });
+function removeFromCart(idx) { cart.splice(idx,1); render(); }
 
-    if (!pointId || !serverData) return;
+function badge(n,val,isCur) {
+  return '<span class="lbl-n '+(val?'done':isCur?'on':'')+'">'+(val?'&#10003;':n)+'</span>';
+}
 
-    Object.keys(cats).forEach(serverCatKey => {
-        const htmlId = cats[serverCatKey];
-        const container = document.getElementById(htmlId);
-        if (!container) return;
+function prog(vals) {
+  var cur=vals.findIndex(function(v){return !v;});
+  return '<div class="prog">'+vals.map(function(v,i){return '<div class="ps '+(v?'done':i===cur?'on':'')+'"></div>';}).join('')+'</div>';
+}
 
-        const products = serverData.products[serverCatKey] || [];
+function renderForm() {
+  var regions = Object.keys(catalog);
+  var tts  = sel.region   ? Object.keys(catalog[sel.region]||{}) : [];
+  var cats = sel.tt       ? Object.keys((catalog[sel.region]||{})[sel.tt]||{}) : [];
+  var prods= sel.category ? (((catalog[sel.region]||{})[sel.tt]||{})[sel.category]||[]) : [];
+  var step = !sel.region?1:!sel.tt?2:!sel.category?3:!sel.product?4:5;
+  var canAdd = !!(sel.product && qty>0);
 
-        // Безопасная проверка: если товаров в категории нет
-        if (products.length === 0) {
-            container.innerHTML = `<div class="sub-text" style="padding: 10px 0;">В этой категории нет товаров</div>`;
-            return;
-        }
+  return prog([!!sel.region,!!sel.tt,!!sel.category,!!sel.product])+
 
-        products.forEach(prod => {
-            const qty = (prod.stock_by_points && prod.stock_by_points[pointId] !== undefined) 
-                        ? prod.stock_by_points[pointId] 
-                        : 0;
+  '<div class="card">'+
+    '<div class="lbl">'+badge(1,sel.region,step===1)+'<span class="lbl-t">Регіон</span>'+(sel.region?'<span class="lbl-v">'+sel.region+'</span>':'')+'</div>'+
+    '<select onchange="onRegion(this.value)"><option value="">— Оберіть регіон —</option>'+
+    regions.map(function(r){return '<option value="'+r+'"'+(sel.region===r?' selected':'')+'>'+r+'</option>';}).join('')+
+    '</select></div>'+
 
-            const itemDiv = document.createElement('div');
-            itemDiv.className = 'product-item';
-            itemDiv.innerHTML = `
-                <div class="product-name">${prod.name}</div>
-                <input type="number" class="product-input" 
-                       data-name="${prod.name}" 
-                       data-cat="${serverCatKey}" 
-                       value="${qty}" min="0" step="any">
-            `;
-            container.appendChild(itemDiv);
-        });
-    });
-}        
-        // Собираем измененные пользователем данные из формы
-        function collectFormData() {
-            const pointId = document.getElementById('point-select').value;
-            const pointName = document.getElementById('point-select').options[document.getElementById('point-select').selectedIndex].text;
-            
-            if (!pointId) {
-                alert("Пожалуйста, выберите торговую точку!");
-                return null;
-            }
+  '<div class="card">'+
+    '<div class="lbl">'+badge(2,sel.tt,step===2)+'<span class="lbl-t">Торгова точка</span>'+(sel.tt?'<span class="lbl-v">'+sel.tt+'</span>':'')+'</div>'+
+    '<select onchange="onTT(this.value)"'+(!sel.region?' disabled':'')+'>'+
+    '<option value="">— Оберіть ТТ —</option>'+
+    tts.map(function(t){return '<option value="'+t+'"'+(sel.tt===t?' selected':'')+'>'+t+'</option>';}).join('')+
+    '</select></div>'+
 
-            let updatedOrders = [];
-            document.querySelectorAll('.product-input').forEach(input => {
-                const val = parseFloat(input.value) || 0;
-                if (val >= 0) {
-                    updatedOrders.push({
-                        product: input.dataset.name,
-                        category: input.dataset.cat,
-                        quantity: val
-                    });
-                }
-            });
+  '<div class="card">'+
+    '<div class="lbl">'+badge(3,sel.category,step===3)+'<span class="lbl-t">Категорія</span>'+(sel.category?'<span class="lbl-v">'+sel.category+'</span>':'')+'</div>'+
+    '<select onchange="onCat(this.value)"'+(!sel.tt?' disabled':'')+'>'+
+    '<option value="">— Оберіть категорію —</option>'+
+    cats.map(function(c){return '<option value="'+c+'"'+(sel.category===c?' selected':'')+'>'+c+'</option>';}).join('')+
+    '</select></div>'+
 
-            return {
-                region: serverData.region,
-                point_id: pointId,
-                point_name: pointName,
-                orders: updatedOrders
-            };
-        }
+  '<div class="card">'+
+    '<div class="lbl">'+badge(4,sel.product,step===4)+'<span class="lbl-t">Товар</span>'+(sel.product?'<span class="lbl-v">'+sel.product+'</span>':'')+'</div>'+
+    '<select onchange="onProd(this)"'+(!sel.category?' disabled':'')+'>'+
+    '<option value="">— Оберіть товар —</option>'+
+    prods.map(function(p){return '<option value="'+p.name+'" data-row="'+p.row+'" data-col="'+p.col+'"'+(sel.product===p.name?' selected':'')+'>'+p.name+'</option>';}).join('')+
+    '</select>'+
+    (sel.product?
+      '<div class="qty-wrap">'+
+        '<button class="qty-btn" onclick="chQty(-0.5)">&#8722;</button>'+
+        '<input type="number" value="'+qty+'" min="0.5" step="0.5" oninput="onQI(this.value)">'+
+        '<span class="qty-unit">кг</span>'+
+        '<button class="qty-btn" onclick="chQty(0.5)">+</button>'+
+      '</div>':'')+
+    '<button class="btn-add" onclick="addToCart()"'+(!canAdd?' disabled':'')+'>&#128722; Додати в кошик</button>'+
+  '</div>';
+}
 
-        // Сценарий 1: Отправка данных обратно в Telegram Bot (через WebApp интерфейс)
-        function sendDataToTelegram() {
-            const payload = collectFormData();
-            if (!payload) return;
+function renderCart() {
+  if (cart.length===0) {
+    return '<div class="card"><div class="cart-empty"><div style="font-size:40px;margin-bottom:8px">&#128722;</div><div>Кошик порожній</div><div style="font-size:12px;margin-top:4px">Додайте товари у формі</div></div></div>';
+  }
+  var rows = cart.map(function(item,idx){
+    return '<div class="cart-item">'+
+      '<div class="ci-info"><div class="ci-name">'+item.product+'</div><div class="ci-meta">'+item.tt+' &middot; '+item.category+'</div></div>'+
+      '<span class="ci-qty">'+item.quantity+' кг</span>'+
+      '<button class="ci-del" onclick="removeFromCart('+idx+')">&#x2715;</button>'+
+    '</div>';
+  }).join('');
+  return '<div class="card">'+rows+'</div>'+
+    '<button class="btn-send" onclick="sendOrder()">&#128228; Відправити замовлення ('+cart.length+')</button>';
+}
 
-            if (tg) {
-                // Метод отправляет JSON-строку обратно боту Telegram. 
-                // Бот поймает событие web_app_data и сможет передать его в n8n для записи в Google Таблицу
-                tg.sendData(JSON.stringify(payload));
-                tg.close();
-            }
-        }
+function render() {
+  var n = cart.length;
+  root.innerHTML =
+    '<div class="tabs">'+
+      '<div class="tab'+(view==='form'?' active':'')+'" onclick="sw(\'form\')">&#128221; Форма</div>'+
+      '<div class="tab'+(view==='cart'?' active':'')+'" onclick="sw(\'cart\')">&#128722; Кошик'+(n>0?'<span class="cnt">'+n+'</span>':'')+'</div>'+
+    '</div>'+
+    (view==='form'?renderForm():renderCart());
+}
 
-        // Сценарий 2: Формирование текстового отчета и отправка в WhatsApp
-        function sendDataToWhatsApp() {
-            const payload = collectFormData();
-            if (!payload) return;
+function sw(v){view=v;render();}
+function onRegion(v){sel={region:v,tt:'',category:'',product:'',productRow:null,productCol:null};qty=1;render();}
+function onTT(v){sel.tt=v;sel.category='';sel.product='';sel.productRow=null;sel.productCol=null;qty=1;render();}
+function onCat(v){sel.category=v;sel.product='';sel.productRow=null;sel.productCol=null;qty=1;render();}
+function onProd(el){
+  sel.product=el.value;
+  var opt=el.options[el.selectedIndex];
+  sel.productRow=opt?opt.dataset.row:null;
+  sel.productCol=opt?opt.dataset.col:null;
+  render();
+}
+function chQty(d){qty=Math.max(0.5,parseFloat((qty+d).toFixed(1)));render();}
+function onQI(v){var n=parseFloat(v);if(!isNaN(n)&&n>0)qty=n;}
 
-            // Формируем красивое текстовое сообщение для мессенджера
-            let message = `*Отчет по региону:* ${payload.region}\n`;
-            message += `*Точка:* ${payload.point_name}\n\n`;
-            
-            let hasData = false;
-            payload.orders.forEach(item => {
-                if (item.quantity > 0) {
-                    message += `• ${item.product}: *${item.quantity}*\n`;
-                    hasData = true;
-                }
-            });
+async function sendOrder() {
+  if(cart.length===0)return;
+  var btn=root.querySelector('.btn-send');
+  if(btn){btn.disabled=true;btn.textContent='Відправка...';}
+  var payload={tg_id:String(TG_ID),tg_name:TG_NAME,cart:cart};
+  try{
+    var res=await fetch(N8N_POST_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    if(!res.ok)throw new Error('Сервер: '+res.status);
+    var sum=cart.map(function(i){return i.product+' — '+i.quantity+' кг';}).join('\n');
+    var msg='Замовлення відправлено!\n\n'+sum;
+    var done=function(){cart=[];sel={region:'',tt:'',category:'',product:'',productRow:null,productCol:null};qty=1;view='form';render();};
+    if(tg&&tg.showAlert)tg.showAlert(msg,done);else{alert(msg);done();}
+  }catch(err){
+    var m='Помилка: '+err.message;
+    if(tg&&tg.showAlert)tg.showAlert(m);else alert(m);
+    if(btn){btn.disabled=false;btn.textContent='Відправити замовлення ('+cart.length+')';}
+  }
+}
 
-            if (!hasData) message += "Нет изменений или товаров.";
-
-            // Кодируем текст в URL и перенаправляем в WhatsApp API
-            const waUrl = `https://whatsapp.com{encodeURIComponent(message)}`;
-            window.open(waUrl, '_blank');
-        }
-
-        // Запуск загрузки данных при открытии страницы
-        loadData();
-    </script>
+async function loadCatalog(){
+  root.innerHTML='<div class="loader"><div class="spinner"></div><span>Завантаження...</span></div>';
+  try{
+    var res=await fetch(N8N_GET_URL);
+    if(!res.ok)throw new Error('HTTP '+res.status);
+    catalog=await res.json();
+    delete catalog['Інше'];
+    render();
+  }catch(err){
+    root.innerHTML='<div class="card"><div class="err"><p>Не вдалося завантажити</p><small>'+err.message+'</small><button class="btn-retry" onclick="loadCatalog()">Спробувати знову</button></div></div>';
+  }
+}
+loadCatalog();
+</script>
 </body>
 </html>
