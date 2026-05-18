@@ -92,7 +92,7 @@ const CAT_META = {
   'Молочка (шт)':  { icon:'🥛', cls:'s2' }
 };
 const CAT_UNIT = { 'Ковбаса':'кг', 'Молочка (вес)':'кг', 'Молочка (шт)':'шт' };
-const CAT_STEP = { 'Ковбаса':0.5, 'Молочка (вес)':0.5, 'Молочка (шт)':1 };
+const CAT_STEP = { 'Ковбаса':1, 'Молочка (вес)':1, 'Молочка (шт)':1 };
 
 const tg = window.Telegram && window.Telegram.WebApp;
 if (tg) { tg.expand(); tg.ready(); }
@@ -163,7 +163,7 @@ function renderProducts(meta) {
   if (prods.length === 0) return '<div class="ph"><div class="ico">📭</div><p>Немає товарів</p></div>';
 
   var unit = CAT_UNIT[selectedCat] || 'кг';
-  var step = CAT_STEP[selectedCat] || 0.5;
+  var step = CAT_STEP[selectedCat] || 1;
 
   var html =
     '<div class="section">'+
