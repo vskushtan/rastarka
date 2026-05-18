@@ -7,18 +7,28 @@
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#f4f6fb;--card:#fff;--primary:#1a56db;--accent:#0ea5e9;--success:#16a34a;--danger:#dc2626;--text:#1e293b;--muted:#64748b;--border:#e2e8f0;--radius:14px;--shadow:0 2px 12px rgba(30,66,159,.08)}
+:root{--bg:#f4f6fb;--card:#fff;--primary:#1a56db;--accent:#0ea5e9;--success:#16a34a;--danger:#dc2626;--text:#1e293b;--muted:#64748b;--border:#e2e8f0;--r:14px;--sh:0 2px 12px rgba(30,66,159,.08)}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:12px 14px 70px}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:12px 14px 80px}
+/* ШАПКА */
 .hdr{display:flex;align-items:center;gap:10px;padding:8px 0 14px}
 .hdr-icon{width:38px;height:38px;background:linear-gradient(135deg,var(--primary),var(--accent));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
 .hdr h1{font-size:18px;font-weight:800;color:#1e429f}
 .hdr p{font-size:11px;color:var(--muted);font-weight:600}
-.card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:14px;margin-bottom:10px;border:1px solid var(--border)}
+/* КАРТКА */
+.card{background:var(--card);border-radius:var(--r);box-shadow:var(--sh);padding:14px;margin-bottom:10px;border:1px solid var(--border)}
 .card-title{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);margin-bottom:10px}
+/* SELECT */
 select{width:100%;padding:12px 40px 12px 14px;border:2px solid var(--border);border-radius:10px;font-size:15px;font-family:'Nunito',sans-serif;font-weight:700;color:var(--text);background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 12px center;appearance:none;cursor:pointer;outline:none;transition:border-color .2s}
 select:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(26,86,219,.1)}
-.section{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);margin-bottom:10px;border:1px solid var(--border);overflow:hidden}
+/* ТАБИ КАТЕГОРІЙ */
+.cat-tabs{display:flex;gap:6px;margin-bottom:10px}
+.cat-tab{flex:1;padding:10px 4px;border-radius:10px;border:2px solid var(--border);background:#fff;font-size:12px;font-weight:800;font-family:'Nunito',sans-serif;color:var(--muted);cursor:pointer;transition:all .2s;text-align:center;line-height:1.3}
+.cat-tab.active{border-color:var(--primary);background:var(--primary);color:#fff}
+.cat-tab.active.s1{border-color:#16a34a;background:#16a34a}
+.cat-tab.active.s2{border-color:#0891b2;background:#0891b2}
+/* ТАБЛИЦЯ ТОВАРІВ */
+.section{background:var(--card);border-radius:var(--r);box-shadow:var(--sh);border:1px solid var(--border);overflow:hidden;margin-bottom:10px}
 .sec-hdr{padding:10px 14px;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:#fff}
 .sec-hdr.s0{background:linear-gradient(135deg,#1a56db,#0ea5e9)}
 .sec-hdr.s1{background:linear-gradient(135deg,#16a34a,#15803d)}
@@ -27,16 +37,20 @@ table{width:100%;border-collapse:collapse}
 tr{border-bottom:1px solid var(--border)}
 tr:last-child{border-bottom:none}
 tr:nth-child(even){background:#f8fafc}
-.td-name{padding:10px 6px 10px 14px;font-size:13px;font-weight:600;color:var(--text);line-height:1.3}
-.td-qty{padding:6px 4px;width:80px;text-align:right}
-.td-qty input{width:74px;padding:7px 8px;border:2px solid var(--border);border-radius:8px;font-size:15px;font-weight:800;font-family:'Nunito',sans-serif;text-align:center;color:var(--text);outline:none;background:#fff;transition:border-color .2s,background .2s;-moz-appearance:textfield}
-.td-qty input::-webkit-inner-spin-button,.td-qty input::-webkit-outer-spin-button{-webkit-appearance:none}
-.td-qty input:focus{border-color:var(--primary);box-shadow:0 0 0 2px rgba(26,86,219,.1)}
-.td-qty input.ok{border-color:var(--success);background:#f0fdf4;color:var(--success)}
-.td-unit{padding:0 14px 0 2px;font-size:11px;font-weight:700;color:var(--muted);width:28px}
-.btn-send{position:fixed;bottom:0;left:0;right:0;padding:16px;background:linear-gradient(135deg,var(--primary),var(--accent));color:#fff;font-size:16px;font-weight:800;font-family:'Nunito',sans-serif;border:none;cursor:pointer;box-shadow:0 -4px 20px rgba(26,86,219,.25);transition:all .2s;z-index:100;display:flex;align-items:center;justify-content:center;gap:8px}
+.td-name{padding:9px 4px 9px 14px;font-size:13px;font-weight:600;color:var(--text);line-height:1.3}
+.td-ctrl{padding:5px 14px 5px 4px;width:130px;text-align:right}
+.qty-row{display:flex;align-items:center;gap:4px;justify-content:flex-end}
+.qb{width:30px;height:30px;border-radius:7px;border:1.5px solid var(--border);background:#fff;font-size:18px;color:var(--primary);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s;line-height:1;font-weight:300}
+.qb:active{background:#eff6ff;border-color:var(--primary);transform:scale(.9)}
+.qty-inp{width:52px;padding:5px 4px;border:2px solid var(--border);border-radius:7px;font-size:14px;font-weight:800;font-family:'Nunito',sans-serif;text-align:center;color:var(--text);outline:none;background:#fff;transition:border-color .2s,background .2s;-moz-appearance:textfield}
+.qty-inp::-webkit-inner-spin-button,.qty-inp::-webkit-outer-spin-button{-webkit-appearance:none}
+.qty-inp:focus{border-color:var(--primary);box-shadow:0 0 0 2px rgba(26,86,219,.1)}
+.qty-inp.ok{border-color:var(--success);background:#f0fdf4;color:var(--success)}
+/* ФІКСОВАНА КНОПКА */
+.btn-send{position:fixed;bottom:0;left:0;right:0;padding:16px;background:linear-gradient(135deg,var(--primary),var(--accent));color:#fff;font-size:16px;font-weight:800;font-family:'Nunito',sans-serif;border:none;cursor:pointer;box-shadow:0 -4px 20px rgba(26,86,219,.25);z-index:100;display:flex;align-items:center;justify-content:center;gap:8px;transition:background .2s}
 .btn-send:disabled{background:#94a3b8;cursor:not-allowed;box-shadow:none}
 .btn-send .cnt{min-width:24px;height:24px;border-radius:12px;background:rgba(255,255,255,.25);font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center;padding:0 6px}
+/* ЛОАДЕР */
 .loader{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 0;gap:14px;color:var(--muted);font-size:14px;font-weight:600}
 .spinner{width:38px;height:38px;border:3px solid var(--border);border-top-color:var(--primary);border-radius:50%;animation:spin .7s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
@@ -59,32 +73,26 @@ tr:nth-child(even){background:#f8fafc}
 <button class="btn-send" id="btn-send" onclick="sendOrder()" disabled>
   📤 Відправити замовлення <span class="cnt" id="cnt">0</span>
 </button>
+
 <script>
 const N8N_GET_URL  = 'https://n8n-el.ddns.net/webhook/rastarka-get';
 const N8N_POST_URL = 'https://n8n-el.ddns.net/webhook/rastarka-post';
 
-// Секції — визначаємо по ключових словах в назві товару
-// Товари з каталогу автоматично розподіляються по секціях
-const SECTIONS = [
-  { key: 'Ковбаса',       icon: '🥩', cls: 's0', match: function(n){ return !isMolochkaVes(n) && !isMolochkaSheet(n); } },
-  { key: 'Молочка (вес)', icon: '🧀', cls: 's1', match: isMolochkaVes },
-  { key: 'Молочка (шт)', icon: '🥛', cls: 's2', match: isMolochkaSheet }
+const CATS = [
+  { key:'Ковбаса',       icon:'🥩', cls:'s0' },
+  { key:'Молочка (вес)', icon:'🧀', cls:'s1' },
+  { key:'Молочка (шт)', icon:'🥛', cls:'s2' }
 ];
-
-function isMolochkaVes(name) {
-  return / кг$/.test(name.trim()) || /ведро/.test(name) || /ваговий/.test(name);
-}
-function isMolochkaSheet(name) {
-  return /, за шт/.test(name) || /, шт/.test(name) || /за шт/.test(name);
-}
 
 const tg = window.Telegram && window.Telegram.WebApp;
 if (tg) { tg.expand(); tg.ready(); }
 const TG_ID   = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user && tg.initDataUnsafe.user.id) || 'test_user';
 const TG_NAME = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user && tg.initDataUnsafe.user.first_name) || 'Тест';
 
-let catalog    = {}; // { tt: { productName: {row, col} } }
+// catalog: { tt: { 'Ковбаса': [{name,row},...], 'Молочка (вес)': [...], 'Молочка (шт)': [...] } }
+let catalog    = {};
 let selectedTT = '';
+let selectedCat= 'Ковбаса';
 let values     = {}; // { productName: qty }
 
 const root    = document.getElementById('root');
@@ -97,18 +105,14 @@ async function loadCatalog() {
   try {
     var res = await fetch(N8N_GET_URL);
     if (!res.ok) throw new Error('HTTP ' + res.status);
-    var data = await res.json();
-    // Прибираємо службові ключі
-    var skip = new Set(['Інше','Торбочка','Опт ','Опт','Себес','Маржа','Розница']);
-    for (var k in data) { if (skip.has(k.trim())) delete data[k]; }
-    catalog = data;
+    catalog = await res.json();
     renderPage();
   } catch(err) {
     root.innerHTML = '<div class="err"><p>Не вдалося завантажити</p><small>'+err.message+'</small><button class="btn-retry" onclick="loadCatalog()">🔄 Повторити</button></div>';
   }
 }
 
-// ── РЕНДЕР ──
+// ── РЕНДЕР СТОРІНКИ ──
 function renderPage() {
   var ttList = Object.keys(catalog).sort();
 
@@ -126,6 +130,17 @@ function renderPage() {
   if (!selectedTT) {
     html += '<div class="ph"><div class="ico">☝️</div><p>Оберіть торгову точку</p><small>Після вибору з\'явиться список товарів</small></div>';
   } else {
+    // Таби категорій
+    html += '<div class="cat-tabs">';
+    CATS.forEach(function(cat) {
+      var isActive = selectedCat === cat.key;
+      html += '<div class="cat-tab '+(isActive?'active '+cat.cls:'')+'" onclick="onCat(\''+cat.key+'\')">';
+      html += cat.icon+'<br>'+cat.key;
+      html += '</div>';
+    });
+    html += '</div>';
+
+    // Таблиця товарів обраної категорії
     html += renderProducts();
   }
 
@@ -133,51 +148,44 @@ function renderPage() {
   updateBtn();
 }
 
+// ── РЕНДЕР ТОВАРІВ ──
 function renderProducts() {
-  var ttData = catalog[selectedTT] || {};
-  var allNames = Object.keys(ttData);
+  var catData = (catalog[selectedTT] && catalog[selectedTT][selectedCat]) || [];
+  var cat = CATS.find(function(c){ return c.key === selectedCat; });
+  var unit = selectedCat === 'Молочка (шт)' ? 'шт' : 'кг';
+  var step = selectedCat === 'Молочка (шт)' ? 1 : 0.5;
 
-  // Розподіляємо товари по секціях
-  var secData = [{},{},{}];
-  allNames.forEach(function(name) {
-    if (isMolochkaVes(name))   secData[1][name] = ttData[name];
-    else if (isMolochkaSheet(name)) secData[2][name] = ttData[name];
-    else                       secData[0][name] = ttData[name];
-  });
+  if (catData.length === 0) {
+    return '<div class="ph"><div class="ico">📭</div><p>Немає товарів</p></div>';
+  }
 
-  var html = '';
-  SECTIONS.forEach(function(sec, si) {
-    var prods = Object.keys(secData[si]);
-    if (prods.length === 0) return;
+  var html = '<div class="section">' +
+    '<div class="sec-hdr '+cat.cls+'">'+cat.icon+' '+cat.key+' — '+selectedTT+'</div>' +
+    '<table>';
 
-    var unit = si === 2 ? 'шт' : 'кг';
-    var step = si === 2 ? '1'  : '0.5';
+  catData.forEach(function(prod) {
+    var pname = prod.name;
+    var val = values[pname] || '';
+    var filled = val !== '' && parseFloat(val) > 0;
+    var safeN = pname.replace(/"/g,'&quot;').replace(/'/g,'&#39;');
 
-    html += '<div class="section">' +
-      '<div class="sec-hdr '+sec.cls+'">'+sec.icon+' '+sec.key+'</div>' +
-      '<table>';
-
-    prods.forEach(function(pname) {
-      var val = values[pname] || '';
-      var filled = val !== '' && parseFloat(val) > 0;
-      var safeId = 'inp_' + pname.replace(/[^a-zA-Zа-яА-ЯіІїЇєЄ0-9]/g,'_');
-      html +=
-        '<tr>' +
-          '<td class="td-name">'+pname+'</td>' +
-          '<td class="td-qty">' +
-            '<input id="'+safeId+'" type="number" min="0" step="'+step+'" placeholder="0"' +
-              ' value="'+(filled?val:'')+'"' +
-              ' class="'+(filled?'ok':'')+'"' +
-              ' data-name="'+pname.replace(/"/g,'&quot;')+'"' +
+    html +=
+      '<tr>' +
+        '<td class="td-name">'+pname+'</td>' +
+        '<td class="td-ctrl">' +
+          '<div class="qty-row">' +
+            '<button class="qb" onclick="adj(\''+safeN+'\','+(step*-1)+','+step+')">&#8722;</button>' +
+            '<input class="qty-inp'+(filled?' ok':'')+'" type="number" min="0" step="'+step+'"' +
+              ' placeholder="0" value="'+(filled?val:'')+'"' +
+              ' data-name="'+safeN+'"' +
               ' oninput="onInp(this)">' +
-          '</td>' +
-          '<td class="td-unit">'+unit+'</td>' +
-        '</tr>';
-    });
-
-    html += '</table></div>';
+            '<button class="qb" onclick="adj(\''+safeN+'\','+step+','+step+')">+</button>' +
+          '</div>' +
+        '</td>' +
+      '</tr>';
   });
 
+  html += '</table></div>';
   return html;
 }
 
@@ -185,7 +193,20 @@ function renderProducts() {
 function onTT(v) {
   selectedTT = v;
   values = {};
+  selectedCat = 'Ковбаса';
   renderPage();
+}
+
+function onCat(v) {
+  selectedCat = v;
+  renderPage();
+  // Відновлюємо значення в полях після рендеру
+  setTimeout(function() {
+    document.querySelectorAll('.qty-inp').forEach(function(el) {
+      var n = el.dataset.name;
+      if (values[n]) { el.value = values[n]; el.classList.add('ok'); }
+    });
+  }, 0);
 }
 
 function onInp(el) {
@@ -198,6 +219,28 @@ function onInp(el) {
     delete values[pname];
     el.classList.remove('ok');
   }
+  updateBtn();
+}
+
+function adj(pname, delta, step) {
+  // Декодуємо HTML entities назад
+  var name = pname.replace(/&quot;/g,'"').replace(/&#39;/g,"'");
+  var cur = parseFloat(values[name] || 0);
+  var next = Math.max(0, parseFloat((cur + delta).toFixed(2)));
+  // Знаходимо поле і оновлюємо
+  document.querySelectorAll('.qty-inp').forEach(function(el) {
+    if (el.dataset.name === pname || el.dataset.name === name) {
+      if (next > 0) {
+        values[name] = next;
+        el.value = next;
+        el.classList.add('ok');
+      } else {
+        delete values[name];
+        el.value = '';
+        el.classList.remove('ok');
+      }
+    }
+  });
   updateBtn();
 }
 
@@ -215,25 +258,29 @@ async function sendOrder() {
   btnSend.disabled = true;
   btnSend.innerHTML = '⏳ Відправка...';
 
-  var ttData = catalog[selectedTT] || {};
+  // Збираємо cart — для кожного товару знаходимо row з каталогу
   var cartItems = [];
+  var ttCatalog = catalog[selectedTT] || {};
 
   for (var pname in values) {
-    var info = ttData[pname];
-    if (!info || !info.row) continue;
-    cartItems.push({
-      product:  pname,
-      row:      info.row,
-      col:      selectedTT,
-      quantity: values[pname]
-    });
+    var qty = values[pname];
+    var row = null;
+    // Шукаємо товар у всіх категоріях
+    for (var ci = 0; ci < CATS.length; ci++) {
+      var catProds = ttCatalog[CATS[ci].key] || [];
+      for (var pi = 0; pi < catProds.length; pi++) {
+        if (catProds[pi].name === pname) { row = catProds[pi].row; break; }
+      }
+      if (row) break;
+    }
+    if (!row) continue;
+    cartItems.push({ product: pname, row: row, col: selectedTT, quantity: qty });
   }
 
   if (cartItems.length === 0) {
-    alert('Помилка: не знайдено товарів в каталозі.');
+    alert('Помилка: не знайдено товарів.');
     btnSend.disabled = false;
-    btnSend.innerHTML = '📤 Відправити <span class="cnt" id="cnt">'+n+'</span>';
-    cntEl = document.getElementById('cnt');
+    btnSend.innerHTML = '📤 Відправити замовлення <span class="cnt" id="cnt">'+n+'</span>';
     return;
   }
 
