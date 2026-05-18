@@ -308,15 +308,20 @@ async function sendOrder() {
   for (var pname in values) {
     var qty = values[pname];
     var row = null;
+    var colLetter = null;
     for (var ci=0; ci<catList.length; ci++) {
       var prods = catalog[selectedTT][catList[ci]] || [];
       for (var pi=0; pi<prods.length; pi++) {
-        if (prods[pi].name === pname) { row = prods[pi].row; break; }
+        if (prods[pi].name === pname) {
+          row = prods[pi].row;
+          colLetter = prods[pi].col;
+          break;
+        }
       }
       if (row) break;
     }
-    if (!row) continue;
-    cartItems.push({ product: pname, row: row, col: selectedTT, quantity: qty });
+    if (!row || !colLetter) continue;
+    cartItems.push({ product: pname, row: row, col: colLetter, quantity: qty });
   }
 
   if (cartItems.length === 0) {
