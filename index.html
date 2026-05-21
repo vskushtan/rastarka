@@ -185,8 +185,8 @@ function renderProducts(meta) {
         '<td class="td-ctrl">'+
           '<div class="qrow">'+
             '<button class="qb" onclick="adj(\''+enc+'\','+(step * -1)+','+step+')">&#8722;</button>'+
-            '<input class="qi'+(filled?' ok':'')+'" type="number" min="0" step="'+step+'"'+
-              ' placeholder="0" value="'+(filled?val:'')+'"'+
+              '<input class="qi'+(userEdited&&filled?' ok':(!userEdited&&filled?' loaded':''))+'" type="number" min="0" step="'+step+'"'+
+                ' value="'+(filled?val:'')+'"'+
               ' data-name="'+esc(pname)+'"'+
               ' oninput="onInp(this)">'+
             '<button class="qb" onclick="adj(\''+enc+'\','+step+','+step+')">+</button>'+
