@@ -216,8 +216,15 @@ function onCat(v) {
 function onInp(el) {
   var pname = el.dataset.name;
   var v = parseFloat(el.value);
-  if (!isNaN(v) && v > 0) { values[pname] = v; el.classList.add('ok'); }
-  else { delete values[pname]; el.classList.remove('ok'); }
+  if (!isNaN(v) && v > 0) {
+    values[pname] = v;
+    el.classList.remove('loaded');
+    el.classList.add('ok');
+  } else {
+    delete values[pname];
+    el.classList.remove('ok');
+    el.classList.remove('loaded');
+  }
   updateBtn();
 }
 
@@ -230,8 +237,8 @@ function adj(pname, delta, step) {
   for (var i=0; i<inputs.length; i++) {
     var el = inputs[i];
     if (el.dataset.name === pname) {
-      if (next > 0) { el.value = next; el.classList.add('ok'); }
-      else { el.value = ''; el.classList.remove('ok'); }
+        if (next > 0) { el.value = next; el.classList.remove('loaded'); el.classList.add('ok'); }
+        else { el.value = ''; el.classList.remove('ok'); el.classList.remove('loaded'); }
       break;
     }
   }
