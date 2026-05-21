@@ -75,11 +75,11 @@ tr:nth-child(even){background:#f8fafc}
 <body>
 <div class="hdr">
   <div class="hdr-icon">🛒</div>
-  <div><h1>Замовлення Поскот</h1><p>Оформлення замовлення</p></div>
+  <div><h1>Замовлення Поскот</h1><p>Оформлення дозамовлення</p></div>
 </div>
 <div id="root"></div>
 <button class="btn-send" id="btn-send" onclick="showConfirm()" disabled>
-  📋 Переглянути замовлення <span class="cnt-badge" id="cnt">0</span>
+  📋 Переглянути дозамовлення <span class="cnt-badge" id="cnt">0</span>
 </button>
 <div id="overlay" style="display:none"></div>
 
@@ -278,7 +278,7 @@ function showConfirm() {
   overlay.innerHTML =
     '<div class="overlay" onclick="closeConfirm(event)">'+
       '<div class="modal" onclick="event.stopPropagation()">'+
-        '<div class="modal-title">📋 Замовлення — '+esc(selectedTT)+'</div>'+
+        '<div class="modal-title">📋 Дозамовлення — '+esc(selectedTT)+'</div>'+
         itemsHtml+
         '<div class="modal-actions">'+
           '<button class="btn-cancel" onclick="closeConfirm()">✏️ Редагувати</button>'+
