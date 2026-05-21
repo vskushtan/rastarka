@@ -188,7 +188,7 @@ function renderProducts(meta) {
               '<input class="qi'+(userEdited&&filled?' ok':(!userEdited&&filled?' loaded':''))+'" type="number" min="0" step="'+step+'"'+
                 ' value="'+(filled?val:'')+'"'+
               ' data-name="'+esc(pname)+'"'+
-              ' oninput="onInp(this)">'+
+              ' oninput="onInp(this)" onkeydown="onKeyDown(this,event)">'+
             '<button class="qb" onclick="adj(\''+enc+'\','+step+','+step+')">+</button>'+
           '</div>'+
         '</td>'+
@@ -229,20 +229,40 @@ function onInp(el) {
 }
 
 function adj(pname, delta, step) {
-  var cur = parseFloat(values[pname] || 0);
-  var next = Math.max(0, parseFloat((cur + delta).toFixed(2)));
-  if (next > 0) values[pname] = next; else delete values[pname];
-  // Оновлюємо поле без перерендеру сторінки
+  // Беремо поточне значення з поля (враховує і loaded і ok)
+  var inputEl = null;
   var inputs = document.querySelectorAll('.qi');
   for (var i=0; i<inputs.length; i++) {
-    var el = inputs[i];
-    if (el.dataset.name === pname) {
-        if (next > 0) { el.value = next; el.classList.remove('loaded'); el.classList.add('ok'); }
-        else { el.value = ''; el.classList.remove('ok'); el.classList.remove('loaded'); }
-      break;
-    }
+    if (inputs[i].dataset.name === pname) { inputEl = inputs[i]; break; }
+  }
+  var fieldVal = inputEl ? parseFloat(inputEl.value) : 0;
+  var cur = !isNaN(fieldVal) ? fieldVal : 0;
+  var next = Math.max(0, parseFloat((cur + delta).toFixed(2)));
+  if (next > 0) values[pname] = next; else delete values[pname];
+  if (inputEl) {
+    if (next > 0) { inputEl.value = next; inputEl.classList.remove('loaded'); inputEl.classList.add('ok'); }
+    else { inputEl.value = ''; inputEl.classList.remove('ok'); inputEl.classList.remove('loaded'); }
   }
   updateBtn();
+}
+
+function onKeyDown(el, event) {
+  var step = parseFloat(el.step) || 1;
+  if (event.key === 'ArrowUp') {
+    event.preventDefault();
+    adj(el.dataset.name, step, step);
+  } else if (event.key === 'ArrowDown') {
+    event.preventDefault();
+    adj(el.dataset.name, -step, step);
+  } else if (event.key === 'Enter') {
+    event.preventDefault();
+    var allInputs = Array.from(document.querySelectorAll('.qi'));
+    var idx = allInputs.indexOf(el);
+    if (idx >= 0 && idx < allInputs.length - 1) {
+      allInputs[idx + 1].focus();
+      allInputs[idx + 1].select();
+    }
+  }
 }
 
 function updateBtn() {
