@@ -40,6 +40,7 @@ tr:nth-child(even){background:#f8fafc}
 .qi::-webkit-inner-spin-button,.qi::-webkit-outer-spin-button{-webkit-appearance:none}
 .qi:focus{border-color:var(--primary)}
 .qi.ok{border-color:var(--success);background:#f0fdf4;color:var(--success)}
+.krat-label{font-size:11px;font-weight:700;color:var(--muted);white-space:nowrap;padding:0 2px}
 .qi.loaded{border-color:#93c5fd;background:#eff6ff;color:#1d4ed8}
 /* МОДАЛ ПІДТВЕРДЖЕННЯ */
 .overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;display:flex;align-items:flex-end;padding:0}
@@ -174,6 +175,7 @@ function renderProducts(meta) {
   prods.forEach(function(prod) {
     var pname = prod.name;
     var fromTable = prod.value || 0;
+    var krat = prod.krat || 1;
     var val = values[pname] !== undefined ? values[pname] : fromTable;
     var userEdited = values[pname] !== undefined;
     var filled = parseFloat(val) > 0;
@@ -185,7 +187,8 @@ function renderProducts(meta) {
         '<td class="td-ctrl">'+
           '<div class="qrow">'+
             '<button class="qb" onclick="adj(\''+enc+'\','+(step * -1)+','+step+')">&#8722;</button>'+
-              '<input class="qi'+(userEdited&&filled?' ok':(!userEdited&&filled?' loaded':''))+'" type="number" min="0" step="'+step+'"'+
+              (krat !== 1 ? '<span class="krat-label">×'+krat+'</span>' : '')+
+            '<input class="qi'+(userEdited&&filled?' ok':(!userEdited&&filled?' loaded':''))+'" type="number" min="0" step="'+step+'"'+
                 ' value="'+(filled?val:'')+'"'+
               ' data-name="'+esc(pname)+'"'+
               ' oninput="onInp(this)" onkeydown="onKeyDown(this,event)">'+
