@@ -112,6 +112,22 @@ const cntEl   = document.getElementById('cnt');
 const overlay = document.getElementById('overlay');
 
 async function loadCatalog() {
+  // Перевірка робочого часу (08:00-18:00 Київ UTC+3)
+  var now = new Date();
+  var kyivHour = (now.getUTCHours() + 3) % 24;
+  if (kyivHour < 8 || kyivHour >= 18) {
+    var kyivTime = String(kyivHour).padStart(2,'0') + ':' + String(now.getUTCMinutes()).padStart(2,'0');
+    root.innerHTML =
+      '<div class="card" style="text-align:center;padding:48px 20px">'+
+        '<div style="font-size:52px;margin-bottom:16px">🕐</div>'+
+        '<div style="font-size:19px;font-weight:800;color:#1e429f;margin-bottom:8px">Поза робочим часом</div>'+
+        '<div style="font-size:14px;color:#64748b">Замовлення приймаються</div>'+
+        '<div style="font-size:17px;font-weight:800;color:#1a56db;margin-top:6px">з 08:00 до 18:00 за Києвом</div>'+
+        '<div style="font-size:13px;color:#94a3b8;margin-top:14px">Зараз: ' + kyivTime + ' (Київ)</div>'+
+      '</div>';
+    btnSend.disabled = true;
+    return;
+  }
   root.innerHTML = '<div class="loader"><div class="spinner"></div><span>Завантаження...</span></div>';
   try {
     var res = await fetch(N8N_GET_URL);
@@ -328,6 +344,13 @@ function closeConfirm(e) {
 
 // ── ВІДПРАВКА ──
 async function sendOrder() {
+  // Перевірка робочого часу
+  var now = new Date();
+  var kyivHour = (now.getUTCHours() + 3) % 24;
+  if (kyivHour < 8 || kyivHour >= 18) {
+    alert('⛔ Замовлення можна відправляти тільки з 08:00 до 18:00 за Києвом');
+    return;
+  }
   var n = Object.keys(values).length;
   if (!selectedTT || n === 0) return;
 
