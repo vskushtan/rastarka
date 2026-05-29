@@ -186,13 +186,13 @@ function renderProducts(meta) {
         '<td class="td-name">'+esc(pname)+'</td>'+
         '<td class="td-ctrl">'+
           '<div class="qrow">'+
-            '<button class="qb" onclick="adj(\''+enc+'\','+(step * -1)+','+step+')">&#8722;</button>'+
-              '<span class="krat-label">×'+krat+'</span>'+
-            '<input class="qi'+(userEdited&&filled?' ok':(!userEdited&&filled?' loaded':''))+'" type="number" min="0" step="'+step+'"'+
-                ' value="'+(filled?val:'')+'"'+
+            '<span class="krat-label">×'+krat+'</span>'+
+            '<button class="qb" onclick="adj(\''+enc+'\','+ (-krat) +','+ krat +')">&#8722;</button>'+
+            '<input class="qi'+(userEdited&&filled?' ok':(!userEdited&&filled?' loaded':''))+'" type="number" min="0" step="'+krat+'"'+
+              ' value="'+(filled?val:'')+'"'+
               ' data-name="'+esc(pname)+'"'+
               ' oninput="onInp(this)" onkeydown="onKeyDown(this,event)">'+
-            '<button class="qb" onclick="adj(\''+enc+'\','+step+','+step+')">+</button>'+
+            '<button class="qb" onclick="adj(\''+enc+'\','+ krat +','+ krat +')">+</button>'+
           '</div>'+
         '</td>'+
       '</tr>';
