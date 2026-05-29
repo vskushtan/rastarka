@@ -120,9 +120,8 @@ async function loadCatalog() {
   // Перевірка робочого часу (08:00-18:00 Київ UTC+3)
   var now = new Date();
   var kyivHour = (now.getUTCHours() + 3) % 24;
-  if (kyivHour < 25)
   // if (kyivHour < 8 || kyivHour >= 18)
-  {
+  if (kyivHour < 25) {
     var kyivTime = String(kyivHour).padStart(2,'0') + ':' + String(now.getUTCMinutes()).padStart(2,'0');
     root.innerHTML =
       '<div class="card" style="text-align:center;padding:48px 20px">'+
@@ -354,9 +353,8 @@ async function sendOrder() {
   // Перевірка робочого часу
   var now = new Date();
   var kyivHour = (now.getUTCHours() + 3) % 24;
-  if (kyivHour < 25)
   // if (kyivHour < 8 || kyivHour >= 18) 
-  {
+  if (kyivHour < 25) {
     alert('⛔ Замовлення можна відправляти тільки з 08:00 до 18:00 за Києвом');
     return;
   }
